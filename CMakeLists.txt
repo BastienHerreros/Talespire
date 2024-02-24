@@ -30,4 +30,10 @@ endif()
 find_package(Boost 1.84.0 REQUIRED COMPONENTS ${BOOST_COMPONENTS})
 message(STATUS "Boost found, version ${Boost_LIB_VERSION}")
 
+######################################
+## EIGEN
+######################################
+find_package(Eigen3 3.4.0 REQUIRED CONFIG)
+message(STATUS "Eigen3 found, version ${Eigen3_VERSION}")
+
 add_subdirectory(src)

@@ -1,6 +1,8 @@
 #pragma once
 
+#include <iostream>
 #include <string>
+#include <vector>
 
 namespace libs::core {
 
@@ -18,11 +20,15 @@ enum class LogLevel
 };
 
 /**
- * @brief Print a string
+ * @brief Print a message
  * @param [in] message The message to print
  * @param [in] level The level of le log
  */
-void print(const std::string& message, LogLevel level = LogLevel::Debug);
-void print(size_t message, LogLevel level = LogLevel::Debug);
+template<typename T>
+void print(const T& message, LogLevel level = LogLevel::Debug)
+{
+    const std::vector<std::string> levelStr{"INFO", "DEBUG", "TRACE", "WARNING", "ERROR"};
+    std::cout << levelStr[static_cast<size_t>(level)] << ": \"" << message << "\"" << std::endl;
+}
 
 } // namespace libs::core

@@ -1,8 +1,11 @@
 set(CORE_SOURCES
-            log.cpp)
+            Layout.cpp
+            Asset.cpp)
 
 set(CORE_HEADERS
-            log.hpp)
+            log.hpp
+            Layout.hpp
+            Asset.hpp)
 
 helper_add_library(talespire_core
     SOURCES
@@ -15,6 +18,7 @@ helper_add_library(talespire_core
         $<INSTALL_INTERFACE:include/>
     PRIVATE_INCLUDES
     PUBLIC_LINKS
+        Eigen3::Eigen
     PRIVATE_LINKS
     PUBLIC_DEFINITIONS
     PRIVATE_DEFINITIONS)

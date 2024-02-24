@@ -1,11 +1,9 @@
 #include "libs/reader/reader.hpp"
 
 #include "libs/reader/base64.hpp"
+#include "libs/reader/gzip.hpp"
 
 #include <libs/core/log.hpp>
-
-#include <boost/iostreams/filter/gzip.hpp>
-#include <boost/iostreams/filtering_stream.hpp>
 
 namespace libs::reader {
 
@@ -26,8 +24,6 @@ std::string cleanSlabCode(const std::string& slabCode)
 
 std::string readSlabCode(const std::string& slabCode)
 {
-    typedef std::vector<char> buffer_t;
-
     const auto cleanedCode = cleanSlabCode(slabCode);
 
     libs::core::print("Cleaned code is " + cleanedCode);
@@ -36,17 +32,9 @@ std::string readSlabCode(const std::string& slabCode)
 
     libs::core::print("Decoded code is " + decodedCode);
 
-    buffer_t compressed;
-    std::copy(decodedCode.begin(), decodedCode.end(), std::back_inserter(compressed));
+    const auto decompressed = gzip::decompress(decodedCode);
 
-    buffer_t decompressed;
-    boost::iostreams::filtering_ostream os;
-    os.push(boost::iostreams::gzip_decompressor());
-    os.push(boost::iostreams::back_inserter(decompressed));
-
-    boost::iostreams::write(os, &compressed[0], static_cast<std::streamsize>(compressed.size()));
-
-    std::string decompressedCode(decompressed.begin(), decompressed.end());
+    std::string decompressedCode(decompressed.cbegin(), decompressed.cend());
 
     libs::core::print("Decompressed code is " + decompressedCode);
 
