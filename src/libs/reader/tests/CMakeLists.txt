@@ -8,5 +8,5 @@ helper_add_test(
     INCLUDE_DIRS
     LINKS
         talespire_core
-        Boost::iostreams
+        talespire_reader
     DEFINITIONS)

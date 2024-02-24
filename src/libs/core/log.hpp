@@ -19,9 +19,10 @@ enum class LogLevel
 
 /**
  * @brief Print a string
- * @param [in] level The level of le log
  * @param [in] message The message to print
+ * @param [in] level The level of le log
  */
-void print(LogLevel level, const std::string& message);
+void print(const std::string& message, LogLevel level = LogLevel::Debug);
+void print(size_t message, LogLevel level = LogLevel::Debug);
 
 } // namespace libs::core

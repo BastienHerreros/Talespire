@@ -1,8 +1,10 @@
 set(READER_SOURCES
-            Reader.cpp)
+            base64.cpp
+            reader.cpp)
 
 set(READER_HEADERS
-            Reader.hpp)
+            base64.hpp
+            reader.hpp)
 
 helper_add_library(talespire_reader
     SOURCES
@@ -15,7 +17,9 @@ helper_add_library(talespire_reader
         $<INSTALL_INTERFACE:include/>
     PRIVATE_INCLUDES
     PUBLIC_LINKS
+        talespire_core
     PRIVATE_LINKS
+        Boost::iostreams
     PUBLIC_DEFINITIONS
     PRIVATE_DEFINITIONS)
 
