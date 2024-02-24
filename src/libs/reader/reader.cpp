@@ -9,10 +9,8 @@
 
 namespace libs::reader {
 
-std::string readSlabCode(const std::string& slabCode)
+std::string cleanSlabCode(const std::string& slabCode)
 {
-    typedef std::vector<char> buffer_t;
-
     const auto firstChar = slabCode.find_first_not_of(" ");
     const auto lastChar = slabCode.find_last_not_of(" ");
 
@@ -22,6 +20,15 @@ std::string readSlabCode(const std::string& slabCode)
     {
         cleanedCode = cleanedCode.substr(3, cleanedCode.size() - 6);
     }
+
+    return cleanedCode;
+}
+
+std::string readSlabCode(const std::string& slabCode)
+{
+    typedef std::vector<char> buffer_t;
+
+    const auto cleanedCode = cleanSlabCode(slabCode);
 
     libs::core::print("Cleaned code is " + cleanedCode);
 
