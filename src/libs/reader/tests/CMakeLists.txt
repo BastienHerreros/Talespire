@@ -1,0 +1,10 @@
+helper_add_test(
+    NAME
+        reader_test
+    PREFIX
+        reader
+    SOURCES
+        reader_test.cpp
+    INCLUDE_DIRS
+    LINKS
+    DEFINITIONS)
