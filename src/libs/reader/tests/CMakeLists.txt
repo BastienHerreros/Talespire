@@ -7,4 +7,6 @@ helper_add_test(
         reader_test.cpp
     INCLUDE_DIRS
     LINKS
+        talespire_core
+        Boost::iostreams
     DEFINITIONS)

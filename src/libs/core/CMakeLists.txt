@@ -1,14 +1,14 @@
-set(READER_SOURCES
-            Reader.cpp)
+set(CORE_SOURCES
+            log.cpp)
 
-set(READER_HEADERS
-            Reader.hpp)
+set(CORE_HEADERS
+            log.hpp)
 
-helper_add_library(talespire_reader
+helper_add_library(talespire_core
     SOURCES
-        ${READER_SOURCES}
+        ${CORE_SOURCES}
     HEADERS
-        ${READER_HEADERS}
+        ${CORE_HEADERS}
     PUBLIC_INCLUDES
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src>
         $<BUILD_INTERFACE:${generated_dir}>
@@ -19,4 +19,4 @@ helper_add_library(talespire_reader
     PUBLIC_DEFINITIONS
     PRIVATE_DEFINITIONS)
 
-add_subdirectory(tests)
+# add_subdirectory(tests)

@@ -54,14 +54,6 @@ function(helper_add_library param_name)
         ${_param_PRIVATE_INCLUDES}
         )
 
-    set_target_properties(${param_name}
-        PROPERTIES
-        DEBUG_POSTFIX "d"
-        FOLDER "libs"
-        SOVERSION ${PROJECT_VERSION_MAJOR}
-        VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}"
-        )
-
     target_compile_options(${param_name} PRIVATE
         -Wall
         -Wextra
@@ -202,50 +194,48 @@ function(helper_add_test)
     set(_multiValueArgs SOURCES INCLUDE_DIRS LINKS DEFINITIONS)
     cmake_parse_arguments(_param "${_options}" "${_oneValueArgs}" "${_multiValueArgs}" ${ARGN})
 
-    if(${helper_DEPLOYABLE} STREQUAL "all")
-        if(NOT ${_param_PREFIX} STREQUAL "")
-            set(_testExecutableName "${_param_PREFIX}_${_param_NAME}")
-        endif()
-
-        add_executable(${_testExecutableName} ${_param_SOURCES})
-
-        target_include_directories(${_testExecutableName} PRIVATE ${_param_INCLUDE_DIRS})
-
-        target_compile_options(${_testExecutableName} PRIVATE
-            -Wall
-            -Wextra
-            -Wshadow
-            -Wnon-virtual-dtor
-            -Wold-style-cast
-            -Wcast-align
-            -Wunused
-            -Woverloaded-virtual
-            -Wpedantic
-            -Wconversion
-            -Wsign-conversion
-            -Wmisleading-indentation
-            -Wdouble-promotion
-            -Wformat=2
-            -Wno-format-y2k
-            -Werror
-            -Wno-unused-parameter
-            -Wduplicated-cond
-            -Wduplicated-branches
-            -Wuseless-cast
-            -Wlogical-op)
-
-        if(BUILD_SHARED_LIBS)
-            list(APPEND _param_DEFINITIONS -DBOOST_TEST_DYN_LINK)
-        endif()
-        if(_param_DEFINITIONS)
-            target_compile_definitions(${_testExecutableName} PRIVATE ${_param_DEFINITIONS})
-        endif()
-
-        target_link_libraries(${_testExecutableName}
-            ${_param_LINKS}
-            Boost::unit_test_framework)
-
-        add_test(NAME ${_testExecutableName}
-            COMMAND ${_testExecutableName} --catch_system_error=yes)
+    if(NOT ${_param_PREFIX} STREQUAL "")
+        set(_testExecutableName "${_param_PREFIX}_${_param_NAME}")
     endif()
+
+    add_executable(${_testExecutableName} ${_param_SOURCES})
+
+    target_include_directories(${_testExecutableName} PRIVATE ${_param_INCLUDE_DIRS})
+
+    target_compile_options(${_testExecutableName} PRIVATE
+        -Wall
+        -Wextra
+        -Wshadow
+        -Wnon-virtual-dtor
+        -Wold-style-cast
+        -Wcast-align
+        -Wunused
+        -Woverloaded-virtual
+        -Wpedantic
+        -Wconversion
+        -Wsign-conversion
+        -Wmisleading-indentation
+        -Wdouble-promotion
+        -Wformat=2
+        -Wno-format-y2k
+        -Werror
+        -Wno-unused-parameter
+        -Wduplicated-cond
+        -Wduplicated-branches
+        -Wuseless-cast
+        -Wlogical-op)
+
+    if(BUILD_SHARED_LIBS)
+        list(APPEND _param_DEFINITIONS -DBOOST_TEST_DYN_LINK)
+    endif()
+    if(_param_DEFINITIONS)
+        target_compile_definitions(${_testExecutableName} PRIVATE ${_param_DEFINITIONS})
+    endif()
+
+    target_link_libraries(${_testExecutableName}
+        ${_param_LINKS}
+        Boost::unit_test_framework)
+
+    add_test(NAME ${_testExecutableName}
+        COMMAND ${_testExecutableName} --catch_system_error=yes)
 endfunction()
