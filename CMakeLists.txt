@@ -36,4 +36,11 @@ message(STATUS "Boost found, version ${Boost_LIB_VERSION}")
 find_package(Eigen3 3.4.0 REQUIRED CONFIG)
 message(STATUS "Eigen3 found, version ${Eigen3_VERSION}")
 
+######################################
+## OPENCV
+######################################
+find_package(OpenCV 4.5.5 REQUIRED COMPONENTS opencv_core opencv_imgproc opencv_imgcodecs opencv_highgui)
+
+message(STATUS "OpenCV found, version ${OpenCV_VERSION}")
+
 add_subdirectory(src)
