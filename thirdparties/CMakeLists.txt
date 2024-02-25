@@ -154,54 +154,6 @@ ExternalProject_Add(${EIGEN_TARGET}
 set(EIGEN_CMAKE_FLAGS -DEigen3_DIR:PATH=${CMAKE_INSTALL_PREFIX}/share/eigen3/cmake -DEIGEN3_INCLUDE_DIR=${BUILD_DIR}/eigen_build/include/eigen3 -DEIGEN_INCLUDE_DIR=${CMAKE_INSTALL_PREFIX}/include/eigen3)
 
 ########################################
-## Png
-########################################
-
-set(PNG_TARGET png)
-ExternalProject_Add(${PNG_TARGET}
-    URL https://github.com/glennrp/libpng/archive/refs/tags/v1.6.37.tar.gz
-    PREFIX ${BUILD_DIR}
-    BUILD_IN_SOURCE 0
-    BUILD_ALWAYS 0
-    UPDATE_COMMAND ""
-    SOURCE_DIR ${CMAKE_CURRENT_BINARY_DIR}/png
-    BINARY_DIR ${BUILD_DIR}/png_build
-    INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
-    CONFIGURE_COMMAND
-        ${CMAKE_COMMAND}
-        ${CMAKE_CORE_BUILD_FLAGS}
-        ${ZLIB_CMAKE_FLAGS}
-        -DPNG_BUILD_ZLIB=OFF
-        -DPNG_DEBUG=OFF
-        -DPNG_FRAMEWORK=OFF
-        -DPNG_HARDWARE_OPTIMIZATIONS=OFF
-        -DPNG_SHARED=${BUILD_SHARED_LIBS}
-        -DPNG_STATIC=$<NOT:$<BOOL:${BUILD_SHARED_LIBS}>>
-        -DPNG_TESTS=OFF
-        -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> <SOURCE_DIR>
-    DEPENDS ${ZLIB_TARGET})
-
-set(PNG_INCLUDE ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR})
-
-if(WIN32)
-    if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-        if(BUILD_SHARED_LIBS)
-            set(PNG_LIBRARY ${LIB_DIR}/libpng16$<$<CONFIG:Debug>:d>${LIB_EXTENSION})
-        else()
-            set(PNG_LIBRARY ${LIB_DIR}/libpng16_static${LIB_EXTENSION})
-        endif()
-    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-        set(PNG_LIBRARY ${LIB_DIR}/libpng16$<$<CONFIG:Debug>:d>${LIB_EXTENSION})
-    else()
-        message(FATAL_ERROR "Unhandle compiler ${CMAKE_CXX_COMPILER_ID}")
-    endif()
-else()
-    set(PNG_LIBRARY ${LIB_DIR}/libpng16$<$<CONFIG:Debug>:d>${LIB_EXTENSION})
-endif()
-
-set(PNG_CMAKE_FLAGS -DPNG_LIBRARY=${PNG_LIBRARY} -DPNG_PNG_INCLUDE_DIR=${PNG_INCLUDE})
-
-########################################
 ## OpenCV
 ########################################
 
@@ -225,14 +177,14 @@ ExternalProject_Add(${OPENCV_TARGET}
         ${PNG_CMAKE_FLAGS}
         -DBUILD_ZLIB=OFF
         -DWITH_EIGEN=${LSURGAR_BUILD_EIGEN}
-        -DWITH_TIFF=OFF
-        -DBUILD_TIFF=OFF
-        -DWITH_PNG=${LSURGAR_BUILD_PNG}
-        -DBUILD_PNG=OFF
-        -DWITH_OPENEXR=OFF
-        -DBUILD_OPENEXR=OFF
-        -DWITH_JPEG=OFF
-        -DBUILD_JPEG=OFF
+        -DWITH_TIFF=ON
+        -DBUILD_TIFF=ON
+        -DWITH_PNG=ON
+        -DBUILD_PNG=ON
+        -DWITH_OPENEXR=ON
+        -DBUILD_OPENEXR=ON
+        -DWITH_JPEG=ON
+        -DBUILD_JPEG=ON
         -DWITH_PROTOBUF=ON
         -DBUILD_PROTOBUF=ON
         -DWITH_FFMPEG=OFF

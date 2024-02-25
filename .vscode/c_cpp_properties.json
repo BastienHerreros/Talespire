@@ -5,7 +5,8 @@
             "includePath": [
                 "${workspaceFolder}/src",
                 "${workspaceFolder}/../thirdparties/install/include",
-                "${workspaceFolder}/../thirdparties/install/include/eigen3"
+                "${workspaceFolder}/../thirdparties/install/include/eigen3",
+                "${workspaceFolder}/../thirdparties/install/include/opencv4"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",

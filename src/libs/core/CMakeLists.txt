@@ -23,8 +23,10 @@ helper_add_library(talespire_core
     PRIVATE_INCLUDES
     PUBLIC_LINKS
         Eigen3::Eigen
+        opencv_core
     PRIVATE_LINKS
         Boost::boost
+        opencv_imgcodecs
     PUBLIC_DEFINITIONS
     PRIVATE_DEFINITIONS)
 
