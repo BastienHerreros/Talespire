@@ -74,87 +74,38 @@ std::string stringToHex(const std::string& input)
     return output;
 }
 
-// template<typename T>
-// void deserializeUnmanagedAndAdvance(char* data, T& val)
-// {
-//     std::memcpy(&val, data, sizeof(T));
-//     data += sizeof(T);
-// }
-
-template<typename T>
-void readBits(std::stringstream& data, T& val)
+BOOST_AUTO_TEST_CASE(test_reader_slab_new)
 {
-    data.read(reinterpret_cast<char*>(&val), sizeof(T));
+    const std::string slabCode = "```H4sIAAAAAAAACjv369xFJgZGBgaGNuWqSddSZjltrmjaz6rFexkkhgAA6ChE2CgAAAA```";
+
+    const auto layouts = libs::reader::getLayouts(slabCode);
+
+    BOOST_CHECK_EQUAL(layouts.size(), 1);
+    BOOST_CHECK_EQUAL(layouts.front().m_assetsCount, 1);
+    BOOST_CHECK_EQUAL(layouts.front().m_assets.size(), 1);
 }
 
-template<typename T>
-void readBits(std::stringstream& data, T& val, std::streamsize size)
+BOOST_AUTO_TEST_CASE(test_reader_multiple_same)
 {
-    data.read(reinterpret_cast<char*>(&val), size);
+    const std::string slabCode =
+      "```H4sIAAAAAAAACjv369xFJgZGBgaGNuWqSddSZjltrmjaz6rFe5mFAQ0YMTAoMEOYYNoIxAIALTK1lUAAAAA```";
+
+    const auto layouts = libs::reader::getLayouts(slabCode);
+
+    BOOST_CHECK_EQUAL(layouts.size(), 1);
+    BOOST_CHECK_EQUAL(layouts.front().m_assetsCount, 4);
+    BOOST_CHECK_EQUAL(layouts.front().m_assets.size(), 4);
 }
 
-BOOST_AUTO_TEST_CASE(test_reader_slab)
+BOOST_AUTO_TEST_CASE(test_reader_slab_old)
 {
     const std::string slabCode = "```H4sIAAAAAAAACzv369xFJgZGBgYGjkvnjZIPm7jsEO9eOn/dW3GQGAIAAO5TP34oAAAA```";
 
-    auto res = libs::reader::readSlabCode(slabCode);
+    const auto layouts = libs::reader::getLayouts(slabCode);
 
-    std::stringstream ss{res};
-
-    uint32_t magicNumber;
-    readBits(ss, magicNumber);
-
-    BOOST_CHECK_EQUAL(magicNumber, 0xD1CEFACE);
-
-    uint16_t version;
-    readBits(ss, version);
-
-    BOOST_CHECK_EQUAL(version, 2);
-
-    uint16_t layoutCount;
-    readBits(ss, layoutCount);
-
-    BOOST_CHECK_EQUAL(layoutCount, 1);
-
-    uint16_t creatureCount;
-    readBits(ss, creatureCount);
-
-    BOOST_CHECK_EQUAL(creatureCount, 0);
-
-    std::vector<libs::core::Layout> layouts;
-    layouts.reserve(layoutCount);
-    for(auto layout = 0u; layout < layoutCount; ++layout)
-    {
-        char assetKindId[16];
-        u_int16_t assetCount, reserved;
-        readBits(ss, assetKindId);
-        readBits(ss, assetCount);
-        readBits(ss, reserved);
-
-        BOOST_CHECK_EQUAL(assetCount, 1);
-
-        layouts.emplace_back(std::string(assetKindId), assetCount, reserved);
-    }
-
-    for(auto& layout : layouts)
-    {
-        char rawAsset[64];
-        readBits(ss, rawAsset);
-
-        std::stringstream assetStream{rawAsset};
-
-        double unused, rot;
-        Eigen::Vector3d scale;
-        readBits(assetStream, unused, 5u);
-        readBits(assetStream, rot, 5u);
-        readBits(assetStream, scale.x(), 18u);
-        readBits(assetStream, scale.y(), 18u);
-        readBits(assetStream, scale.z(), 18u);
-
-        layout.m_assets.emplace_back(rot, scale);
-    }
-
-    libs::core::print((ss.eof() ? "end" : "not end"));
+    BOOST_CHECK_EQUAL(layouts.size(), 1);
+    BOOST_CHECK_EQUAL(layouts.front().m_assetsCount, 1);
+    BOOST_CHECK_EQUAL(layouts.front().m_assets.size(), 1);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

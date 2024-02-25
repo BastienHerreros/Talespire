@@ -94,14 +94,10 @@ ExternalProject_Add(${BOOST_TARGET}
     SOURCE_DIR ${CMAKE_CURRENT_BINARY_DIR}/boost
     BINARY_DIR ${BUILD_DIR}/boost_build
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
-    CONFIGURE_COMMAND cd <SOURCE_DIR> && ./bootstrap.sh --prefix=<INSTALL_DIR> --with-toolset=${BOOST_TOOLSET} --with-libraries=atomic,container,date_time,exception,filesystem,graph,iostreams,log,math,program_options,regex,serialization,stacktrace,system,test,timer,thread
+    CONFIGURE_COMMAND cd <SOURCE_DIR>  && ./bootstrap.sh --prefix=<INSTALL_DIR> --with-toolset=${BOOST_TOOLSET} --with-libraries=iostreams,test
     BUILD_COMMAND ""
     INSTALL_COMMAND cd <SOURCE_DIR> && ./b2 --build-dir=<BINARY_DIR> --prefix=<INSTALL_DIR> ${BOOST_FLAGS} ${BOOST_LINK_FLAGS} -d1 -a -j8 -q install
     DEPENDS ${ZLIB_TARGET})
-set(BOOST_CMAKE_FLAGS -DBOOST_ROOT=${CMAKE_INSTALL_PREFIX})
-if(NOT BUILD_SHARED_LIBS)
-    set(BOOST_CMAKE_FLAGS ${BOOST_CMAKE_FLAGS} -DBoost_USE_STATIC_LIBS=ON)
-endif()
 
 set(EIGEN_TARGET eigen)
 ExternalProject_Add(${EIGEN_TARGET}
@@ -117,4 +113,3 @@ ExternalProject_Add(${EIGEN_TARGET}
         ${CMAKE_COMMAND}
         ${CMAKE_CORE_BUILD_FLAGS}
         -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR> <SOURCE_DIR>)
-set(EIGEN_CMAKE_FLAGS -DEigen3_DIR:PATH=${CMAKE_INSTALL_PREFIX}/share/eigen3/cmake -DEIGEN3_INCLUDE_DIR=${BUILD_DIR}/eigen_build/include/eigen3 -DEIGEN_INCLUDE_DIR=${CMAKE_INSTALL_PREFIX}/include/eigen3)

@@ -2,7 +2,7 @@
 
 namespace libs::core {
 
-Layout::Layout(const std::string& assetKindId, uint16_t assetsCount, uint16_t reserved)
+Layout::Layout(const boost::uuids::uuid& assetKindId, uint16_t assetsCount, uint16_t reserved)
   : m_assetKindId(assetKindId)
   , m_assetsCount(assetsCount)
   , m_reserved(reserved)

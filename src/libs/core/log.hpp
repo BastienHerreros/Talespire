@@ -1,5 +1,7 @@
 #pragma once
 
+#include <boost/uuid/uuid_io.hpp>
+
 #include <iostream>
 #include <string>
 #include <vector>

@@ -20,6 +20,7 @@ helper_add_library(talespire_core
     PUBLIC_LINKS
         Eigen3::Eigen
     PRIVATE_LINKS
+        Boost::boost
     PUBLIC_DEFINITIONS
     PRIVATE_DEFINITIONS)
 
