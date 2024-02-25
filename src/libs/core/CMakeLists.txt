@@ -30,4 +30,4 @@ helper_add_library(talespire_core
     PUBLIC_DEFINITIONS
     PRIVATE_DEFINITIONS)
 
-# add_subdirectory(tests)
+add_subdirectory(tests)

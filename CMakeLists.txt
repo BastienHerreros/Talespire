@@ -16,6 +16,8 @@ set(OUTPUT_FOLDER_NAME "${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}")
 set(EXECUTABLE_OUTPUT_PATH "${PROJECT_BINARY_DIR}/${OUTPUT_FOLDER_NAME}")
 set(LIBRARY_OUTPUT_PATH "${PROJECT_BINARY_DIR}/${OUTPUT_FOLDER_NAME}")
 
+enable_testing()
+
 ######################################
 ## Boost
 ######################################

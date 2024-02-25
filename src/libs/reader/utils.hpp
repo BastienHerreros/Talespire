@@ -33,6 +33,11 @@ void readBits(std::stringstream& data, T& val)
 template<typename T>
 void readBits(std::stringstream& data, T& val, std::streamsize size)
 {
+    if(sizeof(T) < static_cast<size_t>(size))
+    {
+        throw std::runtime_error("Retrun type is too small");
+    }
+
     data.read(reinterpret_cast<char*>(&val), size);
 
     if(data.fail())

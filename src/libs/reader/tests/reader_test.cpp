@@ -1,35 +1,15 @@
 #define BOOST_TEST_MODULE testReader
 
-#include <libs/core/AssetsDatabase.hpp>
 #include <libs/core/Layout.hpp>
 #include <libs/core/log.hpp>
 #include <libs/core/utils.hpp>
-#include <libs/reader/base64.hpp>
-#include <libs/reader/gzip.hpp>
 #include <libs/reader/reader.hpp>
 
 #include <boost/test/unit_test.hpp>
 
 #include <sstream>
 
-/**
- * @struct Fixture
- * @brief Struct used to run a function before all the tests
- */
-struct Fixture
-{
-    /**
-     * @brief Run before all the tests
-     */
-    Fixture()
-    {
-        libs::core::AssetsDatabase::getInstance().init("/mnt/d/SteamLibrary/steamapps/common/TaleSpire/Taleweaver");
-    }
-};
-
 BOOST_AUTO_TEST_SUITE(test_reader)
-
-BOOST_GLOBAL_FIXTURE(Fixture);
 
 BOOST_AUTO_TEST_CASE(test_reader_clean_code_same)
 {
@@ -69,30 +49,6 @@ BOOST_AUTO_TEST_CASE(test_reader_clean_code_same)
         const std::string slabCode = "   ```test1 test2```    ";
         BOOST_CHECK_EQUAL(libs::reader::cleanSlabCode(slabCode), refCode);
     }
-}
-
-BOOST_AUTO_TEST_CASE(test_reader_encode_decode)
-{
-    const std::string original{"test="};
-    const auto encoded = libs::reader::base64::encode(original);
-    const auto decoded = libs::reader::base64::decode(encoded);
-
-    BOOST_CHECK_EQUAL(decoded, original);
-}
-BOOST_AUTO_TEST_CASE(test_reader_compress_decompress)
-{
-    const std::string original{"test="};
-    const auto compressed = libs::reader::gzip::compress(original);
-    const auto decompressed = libs::reader::gzip::decompress(compressed);
-    BOOST_CHECK_EQUAL(decompressed, original);
-}
-
-BOOST_AUTO_TEST_CASE(test_reader_full)
-{
-    const std::string original{"test="};
-    const auto encoded = libs::reader::base64::encode(libs::reader::gzip::compress(original));
-    const auto decompressed = libs::reader::gzip::decompress(libs::reader::base64::decode(encoded));
-    BOOST_CHECK_EQUAL(decompressed, original);
 }
 
 BOOST_AUTO_TEST_CASE(test_reader_unique_grass)
