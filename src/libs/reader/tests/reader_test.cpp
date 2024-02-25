@@ -52,31 +52,33 @@ BOOST_AUTO_TEST_CASE(test_reader_clean_code_same)
     }
 }
 
+BOOST_AUTO_TEST_CASE(test_reader_encode_decode)
+{
+    const std::string original{"test="};
+    const auto encoded = libs::reader::base64::encode(original);
+    const auto decoded = libs::reader::base64::decode(encoded);
+
+    BOOST_CHECK_EQUAL(decoded, original);
+}
 BOOST_AUTO_TEST_CASE(test_reader_compress_decompress)
 {
-    const std::string original{"test"};
+    const std::string original{"test="};
+    const auto compressed = libs::reader::gzip::compress(original);
+    const auto decompressed = libs::reader::gzip::decompress(compressed);
+    BOOST_CHECK_EQUAL(decompressed, original);
+}
+
+BOOST_AUTO_TEST_CASE(test_reader_full)
+{
+    const std::string original{"test="};
     const auto encoded = libs::reader::base64::encode(libs::reader::gzip::compress(original));
     const auto decompressed = libs::reader::gzip::decompress(libs::reader::base64::decode(encoded));
     BOOST_CHECK_EQUAL(decompressed, original);
 }
 
-std::string stringToHex(const std::string& input)
+BOOST_AUTO_TEST_CASE(test_reader_unique)
 {
-    static const char hex_digits[] = "0123456789ABCDEF";
-
-    std::string output;
-    output.reserve(input.length() * 2);
-    for(auto c : input)
-    {
-        output.push_back(hex_digits[c >> 4]);
-        output.push_back(hex_digits[c & 15]);
-    }
-    return output;
-}
-
-BOOST_AUTO_TEST_CASE(test_reader_slab_new)
-{
-    const std::string slabCode = "```H4sIAAAAAAAACjv369xFJgZGBgaGNuWqSddSZjltrmjaz6rFexkkhgAA6ChE2CgAAAA```";
+    const std::string slabCode = "```H4sIAAAAAAAACjv369xFJgZGBgYGgUWHGX9Pme/S4z7T7pZdoRpIDAqYGRgAPkTNoSgAAAA=```";
 
     const auto layouts = libs::reader::getLayouts(slabCode);
 
@@ -85,10 +87,10 @@ BOOST_AUTO_TEST_CASE(test_reader_slab_new)
     BOOST_CHECK_EQUAL(layouts.front().m_assets.size(), 1);
 }
 
-BOOST_AUTO_TEST_CASE(test_reader_multiple_same)
+BOOST_AUTO_TEST_CASE(test_reader_line)
 {
     const std::string slabCode =
-      "```H4sIAAAAAAAACjv369xFJgZGBgaGNuWqSddSZjltrmjaz6rFe5mFAQ0YMTAoMEOYYNoIxAIALTK1lUAAAAA```";
+      "```H4sIAAAAAAAACjv369xFJgZGBgYGgUWHGX9Pme/S4z7T7pZdoRoLUCyCiQEEmCcwQugTDBCaAU4DAPuhm5lAAAAA```";
 
     const auto layouts = libs::reader::getLayouts(slabCode);
 
@@ -97,15 +99,21 @@ BOOST_AUTO_TEST_CASE(test_reader_multiple_same)
     BOOST_CHECK_EQUAL(layouts.front().m_assets.size(), 4);
 }
 
-BOOST_AUTO_TEST_CASE(test_reader_slab_old)
+BOOST_AUTO_TEST_CASE(test_reader_multiple_layouts)
 {
-    const std::string slabCode = "```H4sIAAAAAAAACzv369xFJgZGBgYGjkvnjZIPm7jsEO9eOn/dW3GQGAIAAO5TP34oAAAA```";
+    const std::string slabCode =
+      "```H4sIAAAAAAAACjv369xFJgYmBgYGgUWHGX9Pme/"
+      "S4z7T7pZdoRoLUCwvwdB79kdlz65XBhlq2x9ag8QigIobeBiYJzBC6BMMEJoBSoPkQQAkDwInGNABAF7cA+l0AAAA```";
 
     const auto layouts = libs::reader::getLayouts(slabCode);
 
-    BOOST_CHECK_EQUAL(layouts.size(), 1);
-    BOOST_CHECK_EQUAL(layouts.front().m_assetsCount, 1);
-    BOOST_CHECK_EQUAL(layouts.front().m_assets.size(), 1);
+    BOOST_CHECK_EQUAL(layouts.size(), 2);
+
+    BOOST_CHECK_EQUAL(layouts.at(0).m_assetsCount, 4);
+    BOOST_CHECK_EQUAL(layouts.at(0).m_assets.size(), 4);
+
+    BOOST_CHECK_EQUAL(layouts.at(1).m_assetsCount, 4);
+    BOOST_CHECK_EQUAL(layouts.at(1).m_assets.size(), 4);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

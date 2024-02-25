@@ -6,6 +6,8 @@
 
 #include <libs/core/log.hpp>
 
+#include <bitset>
+
 namespace libs::reader {
 
 std::string cleanSlabCode(const std::string& slabCode)
@@ -53,6 +55,8 @@ std::vector<libs::core::Layout> getLayouts(const std::string& slabCode)
 
     std::stringstream decompressedStream{decompressedCode};
 
+    libs::core::print("Reading header...");
+
     uint32_t magicNumber;
     readBits(decompressedStream, magicNumber);
 
@@ -60,6 +64,7 @@ std::vector<libs::core::Layout> getLayouts(const std::string& slabCode)
     {
         throw std::runtime_error("Magic hex not found");
     }
+    libs::core::print("Bytes read:" + std::to_string(decompressedStream.tellg()), libs::core::LogLevel::Trace);
 
     uint16_t version;
     readBits(decompressedStream, version);
@@ -69,16 +74,24 @@ std::vector<libs::core::Layout> getLayouts(const std::string& slabCode)
         throw std::runtime_error("Version not supported");
     }
 
+    libs::core::print("Bytes read:" + std::to_string(decompressedStream.tellg()), libs::core::LogLevel::Trace);
+
     uint16_t layoutCount;
     readBits(decompressedStream, layoutCount);
 
+    libs::core::print("Bytes read:" + std::to_string(decompressedStream.tellg()), libs::core::LogLevel::Trace);
+
     uint16_t creatureCount;
     readBits(decompressedStream, creatureCount);
+
+    libs::core::print("Bytes read:" + std::to_string(decompressedStream.tellg()), libs::core::LogLevel::Trace);
 
     if(creatureCount != 0)
     {
         throw std::runtime_error("No creatures should be in the slab for version 2");
     }
+
+    libs::core::print("Reading layouts...");
 
     std::vector<libs::core::Layout> layouts;
     layouts.reserve(layoutCount);
@@ -93,35 +106,50 @@ std::vector<libs::core::Layout> getLayouts(const std::string& slabCode)
         boost::uuids::uuid uuid;
         memcpy(&uuid, assetKindId, 16);
         layouts.emplace_back(uuid, assetCount, reserved);
-
-        libs::core::print(uuid);
     }
+
+    libs::core::print("Bytes read:" + std::to_string(decompressedStream.tellg()), libs::core::LogLevel::Trace);
+
+    libs::core::print("Reading assets...");
+
+    // Size in bit
+    constexpr int componentSize{18};
+    constexpr int scaleXSize{componentSize};
+    constexpr int scaleYSize{componentSize};
+    constexpr int scaleZSize{componentSize};
+    constexpr int rotSize{5};
+    constexpr int unusedSize{5};
+
+    constexpr int scaleXOffset{0};
+    constexpr int scaleYOffset{scaleXOffset + scaleXSize};
+    constexpr int scaleZOffset{scaleYOffset + scaleYSize};
+    constexpr int rotOffset{scaleZOffset + scaleZSize};
+    constexpr int unusedOffset{rotOffset + rotSize};
+
+    assert(scaleXSize + scaleYSize + scaleZSize + rotSize + unusedSize == 64);
 
     for(auto& layout : layouts)
     {
         for(auto assetIt = 0u; assetIt < layout.m_assetsCount; ++assetIt)
         {
-            char rawAsset[64];
+            int64_t rawAsset;
             readBits(decompressedStream, rawAsset);
 
-            std::stringstream assetStream{rawAsset};
+            [[maybe_unused]] long int unused;
+            long int rot;
+            Eigen::Vector3<long int> scale;
 
-            double unused, rot;
-            Eigen::Vector3d scale;
-            readBits(assetStream, unused, 5u);
-            readBits(assetStream, rot, 5u);
-            readBits(assetStream, scale.x(), 18u);
-            readBits(assetStream, scale.y(), 18u);
-            readBits(assetStream, scale.z(), 18u);
+            scale.x() = (rawAsset >> scaleXOffset) & getMask(scaleXSize);
+            scale.y() = (rawAsset >> scaleYOffset) & getMask(scaleYSize);
+            scale.z() = (rawAsset >> scaleZOffset) & getMask(scaleZSize);
+            rot = (rawAsset >> rotOffset) & getMask(rotSize);
+            unused = (rawAsset >> unusedOffset) & getMask(unusedSize);
 
-            layout.m_assets.emplace_back(rot, scale);
+            layout.m_assets.emplace_back(rot, scale.cast<double>());
         }
     }
 
-    if(!decompressedStream.eof())
-    {
-        throw std::runtime_error("End of file not reached");
-    }
+    libs::core::print("Bytes read:" + std::to_string(decompressedStream.tellg()), libs::core::LogLevel::Trace);
 
     return layouts;
 }

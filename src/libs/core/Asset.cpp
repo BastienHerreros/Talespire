@@ -1,5 +1,7 @@
 #include "libs/core/Asset.hpp"
 
+#include "libs/core/log.hpp"
+
 namespace libs::core {
 
 Asset::Asset(double rot, const Eigen::Vector3d& scale)

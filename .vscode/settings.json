@@ -62,6 +62,11 @@
         "thread": "cpp",
         "cinttypes": "cpp",
         "typeinfo": "cpp",
-        "complex": "cpp"
+        "complex": "cpp",
+        "bitset": "cpp",
+        "*.ipp": "cpp",
+        "csignal": "cpp",
+        "any": "cpp",
+        "shared_mutex": "cpp"
     }
 }
