@@ -1,3 +1,4 @@
+#include "models/AssetModel.hpp"
 #include "widgets/ImageDisplayWidget.hpp"
 
 #include <QApplication>
@@ -25,6 +26,7 @@ int main(int argc, char* argv[])
 
     // Register types
     qmlRegisterType<app::ui::ImageDisplayWidget>("cpp.widgets", 1.0, 0, "ImageDisplayWidget");
+    qmlRegisterType<app::models::AssetModel>("cpp.models", 1.0, 0, "AssetModel");
 
     // load main qml file
     engine.load(QUrl(QLatin1String("qrc:/app/mainApplication.qml")));

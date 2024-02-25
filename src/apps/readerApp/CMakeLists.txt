@@ -1,9 +1,11 @@
 
 set(APP_SOURCES
         main.cpp
+        models/AssetModel.cpp
         widgets/ImageDisplayWidget.cpp)
 
 set(APP_HEADERS
+        models/AssetModel.hpp
         widgets/ImageDisplayWidget.hpp)
 
 set(QML_RESOURCES
@@ -27,6 +29,7 @@ helper_add_executable(readerApp
         Qt5::Quick
         Qt5::Widgets
         Qt5::QuickControls2
+        opencv_core
     DEFINITIONS
         ${ENABLE_QT_QML_DEBUG}
     RESOURCES)
