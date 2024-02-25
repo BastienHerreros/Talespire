@@ -22,6 +22,7 @@ helper_add_library(talespire_reader
         talespire_core
     PRIVATE_LINKS
         Boost::iostreams
+        Boost::serialization
     PUBLIC_DEFINITIONS
     PRIVATE_DEFINITIONS)
 

@@ -1,7 +1,9 @@
 #define BOOST_TEST_MODULE testReader
 
+#include <libs/core/AssetsDatabase.hpp>
 #include <libs/core/Layout.hpp>
 #include <libs/core/log.hpp>
+#include <libs/core/utils.hpp>
 #include <libs/reader/base64.hpp>
 #include <libs/reader/gzip.hpp>
 #include <libs/reader/reader.hpp>
@@ -10,7 +12,24 @@
 
 #include <sstream>
 
+/**
+ * @struct Fixture
+ * @brief Struct used to run a function before all the tests
+ */
+struct Fixture
+{
+    /**
+     * @brief Run before all the tests
+     */
+    Fixture()
+    {
+        libs::core::AssetsDatabase::getInstance().init("/mnt/d/SteamLibrary/steamapps/common/TaleSpire/Taleweaver");
+    }
+};
+
 BOOST_AUTO_TEST_SUITE(test_reader)
+
+BOOST_GLOBAL_FIXTURE(Fixture);
 
 BOOST_AUTO_TEST_CASE(test_reader_clean_code_same)
 {
@@ -76,13 +95,28 @@ BOOST_AUTO_TEST_CASE(test_reader_full)
     BOOST_CHECK_EQUAL(decompressed, original);
 }
 
-BOOST_AUTO_TEST_CASE(test_reader_unique)
+BOOST_AUTO_TEST_CASE(test_reader_unique_grass)
 {
     const std::string slabCode = "```H4sIAAAAAAAACjv369xFJgZGBgYGgUWHGX9Pme/S4z7T7pZdoRpIDAqYGRgAPkTNoSgAAAA=```";
 
     const auto layouts = libs::reader::getLayouts(slabCode);
 
     BOOST_CHECK_EQUAL(layouts.size(), 1);
+    BOOST_CHECK_EQUAL(layouts.front().m_assetKindId,
+                      libs::core::convertStringToUuid("01c3a210-94fb-449f-8c47-993eda3e7126"));
+    BOOST_CHECK_EQUAL(layouts.front().m_assetsCount, 1);
+    BOOST_CHECK_EQUAL(layouts.front().m_assets.size(), 1);
+}
+
+BOOST_AUTO_TEST_CASE(test_reader_unique_castle)
+{
+    const std::string slabCode = "```H4sIAAAAAAAACzv369xFJgZGBgYGjkvnjZIPm7jsEO9eOn/dW3GQGAIAAO5TP34oAAAA```";
+
+    const auto layouts = libs::reader::getLayouts(slabCode);
+
+    BOOST_CHECK_EQUAL(layouts.size(), 1);
+    BOOST_CHECK_EQUAL(layouts.front().m_assetKindId,
+                      libs::core::convertStringToUuid("32cfd208-c363-4434-b817-8ba59faeed17"));
     BOOST_CHECK_EQUAL(layouts.front().m_assetsCount, 1);
     BOOST_CHECK_EQUAL(layouts.front().m_assets.size(), 1);
 }

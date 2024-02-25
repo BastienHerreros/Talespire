@@ -5,6 +5,7 @@
 #include "libs/reader/utils.hpp"
 
 #include <libs/core/log.hpp>
+#include <libs/core/utils.hpp>
 
 #include <bitset>
 
@@ -95,7 +96,7 @@ std::vector<libs::core::Layout> getLayouts(const std::string& slabCode)
 
     std::vector<libs::core::Layout> layouts;
     layouts.reserve(layoutCount);
-    for(auto layout = 0u; layout < layoutCount; ++layout)
+    for(auto layoutIt = 0u; layoutIt < layoutCount; ++layoutIt)
     {
         char assetKindId[16];
         u_int16_t assetCount, reserved;
@@ -103,8 +104,8 @@ std::vector<libs::core::Layout> getLayouts(const std::string& slabCode)
         readBits(decompressedStream, assetCount);
         readBits(decompressedStream, reserved);
 
-        boost::uuids::uuid uuid;
-        memcpy(&uuid, assetKindId, 16);
+        boost::uuids::uuid uuid = libs::core::convertBinToUuid(assetKindId);
+
         layouts.emplace_back(uuid, assetCount, reserved);
     }
 

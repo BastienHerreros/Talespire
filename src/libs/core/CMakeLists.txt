@@ -1,11 +1,15 @@
 set(CORE_SOURCES
+            Asset.cpp
+            AssetsDatabase.cpp
             Layout.cpp
-            Asset.cpp)
+            utils.cpp)
 
 set(CORE_HEADERS
-            log.hpp
+            Asset.hpp
+            AssetsDatabase.hpp
             Layout.hpp
-            Asset.hpp)
+            log.hpp
+            utils.hpp)
 
 helper_add_library(talespire_core
     SOURCES

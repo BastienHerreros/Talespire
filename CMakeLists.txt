@@ -19,7 +19,7 @@ set(LIBRARY_OUTPUT_PATH "${PROJECT_BINARY_DIR}/${OUTPUT_FOLDER_NAME}")
 ######################################
 ## Boost
 ######################################
-set(BOOST_COMPONENTS iostreams unit_test_framework)
+set(BOOST_COMPONENTS iostreams unit_test_framework serialization)
 
 if(NOT BUILD_SHARED_LIBS)
   set(Boost_USE_STATIC_LIBS ON)

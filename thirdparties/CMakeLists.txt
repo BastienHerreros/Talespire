@@ -94,7 +94,7 @@ ExternalProject_Add(${BOOST_TARGET}
     SOURCE_DIR ${CMAKE_CURRENT_BINARY_DIR}/boost
     BINARY_DIR ${BUILD_DIR}/boost_build
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
-    CONFIGURE_COMMAND cd <SOURCE_DIR>  && ./bootstrap.sh --prefix=<INSTALL_DIR> --with-toolset=${BOOST_TOOLSET} --with-libraries=iostreams,test
+    CONFIGURE_COMMAND cd <SOURCE_DIR>  && ./bootstrap.sh --prefix=<INSTALL_DIR> --with-toolset=${BOOST_TOOLSET} --with-libraries=iostreams,test,serialization
     BUILD_COMMAND ""
     INSTALL_COMMAND cd <SOURCE_DIR> && ./b2 --build-dir=<BINARY_DIR> --prefix=<INSTALL_DIR> ${BOOST_FLAGS} ${BOOST_LINK_FLAGS} -d1 -a -j8 -q install
     DEPENDS ${ZLIB_TARGET})
