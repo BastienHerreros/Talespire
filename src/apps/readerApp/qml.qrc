@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/">
+        <file>app/mainApplication.qml</file>
+
+        <file>pages/qmldir</file>
+
+        <file>widgets/qmldir</file>
+    </qresource>
+
+    <qresource prefix="/icons">
+    </qresource>
+</RCC>

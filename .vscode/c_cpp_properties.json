@@ -6,7 +6,8 @@
                 "${workspaceFolder}/src",
                 "${workspaceFolder}/../thirdparties/install/include",
                 "${workspaceFolder}/../thirdparties/install/include/eigen3",
-                "${workspaceFolder}/../thirdparties/install/include/opencv4"
+                "${workspaceFolder}/../thirdparties/install/include/opencv4",
+                "/home/bastien/softwares/qt/5.15.2/gcc_64/include/**"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",

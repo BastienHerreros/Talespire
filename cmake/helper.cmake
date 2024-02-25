@@ -130,7 +130,7 @@ function(helper_add_executable param_name)
         PRIVATE ${_param_INCLUDE_DIRS}
         )
 
-    target_compile_options(${param_name}
+        target_compile_options(${param_name} PRIVATE
         -Wall
         -Wextra
         -Wshadow

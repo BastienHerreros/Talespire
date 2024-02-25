@@ -43,6 +43,16 @@ message(STATUS "Eigen3 found, version ${Eigen3_VERSION}")
 ######################################
 find_package(OpenCV 4.5.5 REQUIRED COMPONENTS opencv_core opencv_imgproc opencv_imgcodecs opencv_highgui)
 
+######################################
+## Qt
+######################################
+set(LSURGAR_QT_REQUIRED_VERSION 5.15)
+find_package(Qt5 ${LSURGAR_QT_REQUIRED_VERSION} REQUIRED COMPONENTS Qml Quick Svg QuickControls2)
+if(Qt5_FOUND)
+    message(STATUS "Qt found, version ${Qt5_VERSION}")
+endif()
+
+
 message(STATUS "OpenCV found, version ${OpenCV_VERSION}")
 
 add_subdirectory(src)
