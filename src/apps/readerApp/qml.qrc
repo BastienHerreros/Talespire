@@ -3,8 +3,10 @@
         <file>app/mainApplication.qml</file>
 
         <file>pages/qmldir</file>
+        <file>pages/ReaderPage.qml</file>
 
         <file>widgets/qmldir</file>
+        <file>widgets/ListViewWidget.qml</file>
     </qresource>
 
     <qresource prefix="/icons">

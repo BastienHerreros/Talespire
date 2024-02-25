@@ -4,6 +4,8 @@ import QtQuick.Controls.Material 2.15
 import QtQuick.Layouts 1.15
 import QtQuick.Window 2.15
 
+import pages 1.0
+
 ApplicationWindow {
     id: root
 
@@ -18,20 +20,19 @@ ApplicationWindow {
     minimumWidth: 1280
     minimumHeight: 720
 
-    // Loader {
-    //     id: pageLoader
+    Loader {
+        id: pageLoader
 
-    //     sourceComponent: selectPatientPageComponent
+        sourceComponent: readerPageComponent
 
-    //     anchors.fill: parent
+        anchors.fill: parent
 
-    //     Component {
-    //         id: selectPatientPageComponent
+        Component {
+            id: readerPageComponent
 
-    //         SelectPatientPage {
-    //             anchors.fill: parent
-
-    //         }
-    //     }
-    // }
+            ReaderPage {
+                anchors.fill: parent
+            }
+        }
+    }
 }

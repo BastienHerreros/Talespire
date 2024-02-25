@@ -74,7 +74,6 @@ function(helper_add_library param_name)
         -Wno-unused-parameter
         -Wduplicated-cond
         -Wduplicated-branches
-        -Wuseless-cast
         -Wlogical-op)
 
     target_compile_definitions(${param_name} PUBLIC ${_param_PUBLIC_DEFINITIONS} PRIVATE ${_param_PRIVATE_DEFINITIONS})
@@ -150,7 +149,6 @@ function(helper_add_executable param_name)
         -Wno-unused-parameter
         -Wduplicated-cond
         -Wduplicated-branches
-        -Wuseless-cast
         -Wlogical-op)
 
         target_compile_definitions(${param_name} PRIVATE ${_param_DEFINITIONS})
@@ -222,7 +220,6 @@ function(helper_add_test)
         -Wno-unused-parameter
         -Wduplicated-cond
         -Wduplicated-branches
-        -Wuseless-cast
         -Wlogical-op)
 
     if(BUILD_SHARED_LIBS)

@@ -1,8 +1,10 @@
 
 set(APP_SOURCES
-        main.cpp)
+        main.cpp
+        widgets/ImageDisplayWidget.cpp)
 
-set(APP_HEADERS)
+set(APP_HEADERS
+        widgets/ImageDisplayWidget.hpp)
 
 set(QML_RESOURCES
     qml.qrc)

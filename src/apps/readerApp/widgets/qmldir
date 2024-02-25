@@ -1,1 +1,3 @@
 module widgets
+
+ListViewWidget 1.0 ListViewWidget.qml
