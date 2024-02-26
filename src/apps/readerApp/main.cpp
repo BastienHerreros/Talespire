@@ -1,19 +1,16 @@
+#include "controllers/ReaderCtrl.hpp"
 #include "models/AssetModel.hpp"
 #include "widgets/ImageDisplayWidget.hpp"
 
 #include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-#include <QQuickStyle>
 
 int main(int argc, char* argv[])
 {
     // Create the QApplication
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication app(argc, argv);
-
-    // set the style
-    // QQuickStyle::setStyle("Material");
 
     QApplication::setApplicationName("ReaderApp");
     QApplication::setApplicationVersion("1.0.0");
@@ -27,6 +24,7 @@ int main(int argc, char* argv[])
     // Register types
     qmlRegisterType<app::ui::ImageDisplayWidget>("cpp.widgets", 1.0, 0, "ImageDisplayWidget");
     qmlRegisterType<app::models::AssetModel>("cpp.models", 1.0, 0, "AssetModel");
+    qmlRegisterType<app::controllers::ReaderCtrl>("ReaderCtrl", 1.0, 0, "ReaderCtrl");
 
     // load main qml file
     engine.load(QUrl(QLatin1String("qrc:/app/mainApplication.qml")));

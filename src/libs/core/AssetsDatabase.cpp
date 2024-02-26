@@ -22,6 +22,11 @@ void AssetsDatabase::init(const std::string& taleweaverFolderPath)
 {
     const std::array<std::string, 3> keysToRead = {"Tiles", "Props", "Creatures"};
 
+    libs::core::print("Loading database from:");
+    libs::core::print(taleweaverFolderPath);
+
+    std::unordered_map<std::string, cv::Mat> cache;
+
     for(const auto& dirIt : std::filesystem::recursive_directory_iterator(taleweaverFolderPath))
     {
         if(dirIt.is_directory())
@@ -67,8 +72,15 @@ void AssetsDatabase::init(const std::string& taleweaverFolderPath)
 
                         const auto spritesheetFilename = it->second.get_child("Path").get_value<std::string>();
 
-                        const cv::Mat spriteSheet =
-                          cv::imread(dirIt.path().parent_path() / spritesheetFilename, cv::IMREAD_UNCHANGED);
+                        if(cache.count(spritesheetFilename) == 0)
+                        {
+                            const auto image =
+                              cv::imread(dirIt.path().parent_path() / spritesheetFilename, cv::IMREAD_COLOR);
+
+                            cache.insert({spritesheetFilename, image.clone()});
+                        }
+
+                        const cv::Mat& spriteSheet = cache.at(spritesheetFilename);
 
                         // Coordinates of the bottom left corner from the bottom left
                         const double relativeX = iconRoot.get_child("Region").get_child("x").get_value<double>(); // col
@@ -93,10 +105,19 @@ void AssetsDatabase::init(const std::string& taleweaverFolderPath)
             }
         }
     }
+
+    libs::core::print("Loading done");
+
+    m_isInitialize = true;
 }
 
 const AssetInfo& AssetsDatabase::getAsset(const boost::uuids::uuid& id) const
 {
+    if(!m_isInitialize)
+    {
+        throw std::runtime_error("You must initialize the database before using it");
+    }
+
     if(m_assetsInfos.count(id) == 0)
     {
         throw std::invalid_argument("Id not found");
@@ -104,4 +125,7 @@ const AssetInfo& AssetsDatabase::getAsset(const boost::uuids::uuid& id) const
 
     return m_assetsInfos.at(id);
 }
+
+bool AssetsDatabase::isInitialized() const { return m_isInitialize; }
+
 }

@@ -75,6 +75,8 @@
         "filesystem": "cpp",
         "qapplication": "cpp",
         "qqmlapplicationengine": "cpp",
-        "qpainter": "cpp"
+        "qpainter": "cpp",
+        "qquickstyle": "cpp",
+        "qqmlcontext": "cpp"
     }
 }

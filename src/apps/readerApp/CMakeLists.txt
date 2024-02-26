@@ -1,10 +1,12 @@
 
 set(APP_SOURCES
         main.cpp
+        controllers/ReaderCtrl.cpp
         models/AssetModel.cpp
         widgets/ImageDisplayWidget.cpp)
 
 set(APP_HEADERS
+        controllers/ReaderCtrl.hpp
         models/AssetModel.hpp
         widgets/ImageDisplayWidget.hpp)
 
@@ -24,6 +26,9 @@ helper_add_executable(readerApp
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
         $<INSTALL_INTERFACE:include/>
     LINKS
+        talespire_reader
+        talespire_core
+        Boost::boost
         Qt5::Core
         Qt5::Qml
         Qt5::Quick

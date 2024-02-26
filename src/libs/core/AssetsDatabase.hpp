@@ -48,6 +48,12 @@ class AssetsDatabase
      */
     const AssetInfo& getAsset(const boost::uuids::uuid& id) const;
 
+    /**
+     * @brief Check whether the database was initialized or not
+     * @return Whether the database was initialized or not
+     */
+    bool isInitialized() const;
+
   private:
     /**
      * @brief Construct a new Assets Database object
@@ -59,6 +65,9 @@ class AssetsDatabase
 
     /// Extracted information from the json file
     std::unordered_map<boost::uuids::uuid, AssetInfo, boost::hash<boost::uuids::uuid>> m_assetsInfos;
+
+    /// Whether the database was initialized or not
+    bool m_isInitialize{false};
 };
 
 }
