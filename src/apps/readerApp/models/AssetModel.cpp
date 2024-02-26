@@ -36,6 +36,9 @@ QVariant AssetModel::data(const QModelIndex& index, int role) const
         case AssetModelRoles::NameRole: {
             return QVariant::fromValue(m_assets.at(static_cast<size_t>(index.row())).m_assetName);
         }
+        case AssetModelRoles::NumberRole: {
+            return QVariant::fromValue(m_assets.at(static_cast<size_t>(index.row())).m_number);
+        }
         default: {
             return QVariant();
         }
@@ -47,10 +50,11 @@ QHash<int, QByteArray> AssetModel::roleNames() const
     QHash<int, QByteArray> roles;
     roles[static_cast<int>(AssetModelRoles::QtImageRole)] = "qtImage";
     roles[static_cast<int>(AssetModelRoles::NameRole)] = "assetName";
+    roles[static_cast<int>(AssetModelRoles::NumberRole)] = "numberOfInstance";
     return roles;
 }
 
-void AssetModel::insertAsset(const std::string& assetName, const cv::Mat& image)
+void AssetModel::insertAsset(const std::string& assetName, const cv::Mat& image, int numberOfInstance)
 {
     const auto row = static_cast<int>(m_assets.size());
 
@@ -59,6 +63,7 @@ void AssetModel::insertAsset(const std::string& assetName, const cv::Mat& image)
     QtAsset asset;
     asset.m_assetName = QString::fromStdString(assetName);
     asset.m_qtImage = cvMatToQImage(image);
+    asset.m_number = numberOfInstance;
 
     m_assets.emplace_back(asset);
 

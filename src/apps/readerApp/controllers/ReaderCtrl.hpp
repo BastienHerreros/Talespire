@@ -42,10 +42,10 @@ class ReaderCtrl : public QObject
 
     void initDatabaseEnd() const;
 
-    void newAssetLoaded(const libs::core::AssetInfo& asset) const;
+    void newAssetLoaded(const libs::core::AssetInfo& asset, int numberOfInstance) const;
 
   private slots:
-    void onNewAssetLoaded(const libs::core::AssetInfo& asset);
+    void onNewAssetLoaded(const libs::core::AssetInfo& asset, int numberOfInstance);
 
   private:
     std::thread m_tread;

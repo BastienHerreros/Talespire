@@ -22,6 +22,9 @@ struct QtAsset
 
     /// The name of the asset
     QString m_assetName;
+
+    /// The number of instances of that asset
+    int m_number;
 };
 
 /**
@@ -40,7 +43,8 @@ class AssetModel : public QAbstractListModel
     enum class AssetModelRoles
     {
         QtImageRole = Qt::UserRole,
-        NameRole
+        NameRole,
+        NumberRole
     };
 
     /**
@@ -80,8 +84,9 @@ class AssetModel : public QAbstractListModel
      * @brief Insert a new asset
      * @param [in] assetName The name of the asset
      * @param [in] image The image to insert
+     * @param [in] numberOfInstance The number of instances
      */
-    void insertAsset(const std::string& assetName, const cv::Mat& image);
+    void insertAsset(const std::string& assetName, const cv::Mat& image, int numberOfInstance);
 
     /**
      * @brief Clear the model

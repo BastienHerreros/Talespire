@@ -95,7 +95,7 @@ void ReaderCtrl::loadSlab(const QString& slabCode)
 
                   if(assetOpt.has_value())
                   {
-                      emit newAssetLoaded(assetOpt.value());
+                      emit newAssetLoaded(assetOpt.value(), static_cast<int>(layout.m_assetsCount));
                   }
                   else
                   {
@@ -103,7 +103,7 @@ void ReaderCtrl::loadSlab(const QString& slabCode)
                       info.m_name = boost::uuids::to_string(assetId);
                       info.m_icon = cv::Mat::zeros(128, 128, CV_8UC3);
 
-                      emit newAssetLoaded(info);
+                      emit newAssetLoaded(info, static_cast<int>(layout.m_assetsCount));
                   }
               }
           }
@@ -116,9 +116,9 @@ void ReaderCtrl::loadSlab(const QString& slabCode)
       slabCode);
 }
 
-void ReaderCtrl::onNewAssetLoaded(const libs::core::AssetInfo& asset)
+void ReaderCtrl::onNewAssetLoaded(const libs::core::AssetInfo& asset, int numberOfInstance)
 {
-    m_model.insertAsset(asset.m_name, asset.m_icon);
+    m_model.insertAsset(asset.m_name, asset.m_icon, numberOfInstance);
 }
 
 }

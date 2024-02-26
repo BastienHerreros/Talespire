@@ -240,6 +240,19 @@ Rectangle {
                                 font.pixelSize: 20
                             }
                         }
+
+                        Item {
+                            Layout.fillHeight: true
+                            Layout.preferredWidth: 30
+
+                            Text {
+                                text: model.numberOfInstance
+                                anchors.fill: parent
+                                horizontalAlignment: Qt.AlignLeft
+                                verticalAlignment: Qt.AlignVCenter
+                                font.pixelSize: 20
+                            }
+                        }
                     }
                 }
             }
