@@ -83,6 +83,11 @@ class AssetModel : public QAbstractListModel
      */
     void insertAsset(const std::string& assetName, const cv::Mat& image);
 
+    /**
+     * @brief Clear the model
+     */
+    void clear();
+
   private:
     /// Sub-images
     std::vector<QtAsset> m_assets;

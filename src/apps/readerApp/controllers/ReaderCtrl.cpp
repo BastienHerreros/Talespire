@@ -5,6 +5,8 @@
 #include <QSettings>
 #include <QUrl>
 
+#include <boost/uuid/uuid_io.hpp>
+
 #include <exception>
 
 namespace app::controllers {
@@ -78,15 +80,37 @@ void ReaderCtrl::loadSlab(const QString& slabCode)
         m_tread.join();
     }
 
+    m_model.clear();
+
     m_tread = std::thread(
       [this](QString localSlabCode) {
-          const auto layouts = libs::reader::getLayouts(localSlabCode.toStdString());
-
-          for(const auto& layout : layouts)
+          try
           {
-              const auto& assetId = layout.m_assetKindId;
-              const auto& asset = m_database.getAsset(assetId);
-              emit newAssetLoaded(asset);
+              const auto layouts = libs::reader::getLayouts(localSlabCode.toStdString());
+
+              for(const auto& layout : layouts)
+              {
+                  const auto& assetId = layout.m_assetKindId;
+                  const auto assetOpt = m_database.getAsset(assetId);
+
+                  if(assetOpt.has_value())
+                  {
+                      emit newAssetLoaded(assetOpt.value());
+                  }
+                  else
+                  {
+                      libs::core::AssetInfo info;
+                      info.m_name = boost::uuids::to_string(assetId);
+                      info.m_icon = cv::Mat::zeros(128, 128, CV_8UC3);
+
+                      emit newAssetLoaded(info);
+                  }
+              }
+          }
+          catch(const std::exception& e)
+          {
+              emit error(QString(e.what()));
+              return;
           }
       },
       slabCode);

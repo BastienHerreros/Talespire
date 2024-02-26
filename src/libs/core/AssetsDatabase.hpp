@@ -4,6 +4,7 @@
 #include <boost/uuid/uuid.hpp>
 #include <opencv2/core/mat.hpp>
 
+#include <optional>
 #include <string>
 #include <unordered_map>
 
@@ -46,7 +47,7 @@ class AssetsDatabase
      * @param [in] id The uuid of the asset
      * @return The information about an asset
      */
-    const AssetInfo& getAsset(const boost::uuids::uuid& id) const;
+    std::optional<AssetInfo> getAsset(const boost::uuids::uuid& id) const;
 
     /**
      * @brief Check whether the database was initialized or not

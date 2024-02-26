@@ -65,5 +65,12 @@ void AssetModel::insertAsset(const std::string& assetName, const cv::Mat& image)
     endInsertRows();
 }
 
+void AssetModel::clear()
+{
+    beginRemoveRows(QModelIndex(), 0, rowCount());
+    m_assets.clear();
+    endRemoveRows();
+}
+
 }
 }

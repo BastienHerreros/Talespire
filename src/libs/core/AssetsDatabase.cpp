@@ -111,7 +111,7 @@ void AssetsDatabase::init(const std::string& taleweaverFolderPath)
     m_isInitialize = true;
 }
 
-const AssetInfo& AssetsDatabase::getAsset(const boost::uuids::uuid& id) const
+std::optional<AssetInfo> AssetsDatabase::getAsset(const boost::uuids::uuid& id) const
 {
     if(!m_isInitialize)
     {
@@ -120,7 +120,7 @@ const AssetInfo& AssetsDatabase::getAsset(const boost::uuids::uuid& id) const
 
     if(m_assetsInfos.count(id) == 0)
     {
-        throw std::invalid_argument("Id not found");
+        return std::nullopt;
     }
 
     return m_assetsInfos.at(id);
