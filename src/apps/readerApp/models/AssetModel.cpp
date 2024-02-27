@@ -1,17 +1,5 @@
 #include "models/AssetModel.hpp"
 
-namespace {
-/**
- * @brief Convert a colored cv mat to a QImage
- * @param [in] image The matrix to convert
- * @return The converted QImage
- */
-QImage cvMatToQImage(const cv::Mat& image)
-{
-    return QImage(image.data, image.cols, image.rows, static_cast<int>(image.step), QImage::Format_BGR888).copy();
-}
-}
-
 namespace app {
 namespace models {
 
@@ -30,14 +18,11 @@ QVariant AssetModel::data(const QModelIndex& index, int role) const
 
     switch(static_cast<AssetModelRoles>(role))
     {
-        case AssetModelRoles::QtImageRole: {
-            return QVariant::fromValue(m_assets.at(static_cast<size_t>(index.row())).m_qtImage);
+        case AssetModelRoles::PoseRole: {
+            return QVariant::fromValue(m_assets.at(static_cast<size_t>(index.row())).m_pos);
         }
-        case AssetModelRoles::NameRole: {
-            return QVariant::fromValue(m_assets.at(static_cast<size_t>(index.row())).m_assetName);
-        }
-        case AssetModelRoles::NumberRole: {
-            return QVariant::fromValue(m_assets.at(static_cast<size_t>(index.row())).m_number);
+        case AssetModelRoles::RotationRole: {
+            return QVariant::fromValue(m_assets.at(static_cast<size_t>(index.row())).m_rot);
         }
         default: {
             return QVariant();
@@ -48,24 +33,24 @@ QVariant AssetModel::data(const QModelIndex& index, int role) const
 QHash<int, QByteArray> AssetModel::roleNames() const
 {
     QHash<int, QByteArray> roles;
-    roles[static_cast<int>(AssetModelRoles::QtImageRole)] = "qtImage";
-    roles[static_cast<int>(AssetModelRoles::NameRole)] = "assetName";
-    roles[static_cast<int>(AssetModelRoles::NumberRole)] = "numberOfInstance";
+    roles[static_cast<int>(AssetModelRoles::PoseRole)] = "position";
+    roles[static_cast<int>(AssetModelRoles::RotationRole)] = "rotation";
     return roles;
 }
 
-void AssetModel::insertAsset(const std::string& assetName, const cv::Mat& image, int numberOfInstance)
+void AssetModel::insertAsset(const libs::core::Asset& asset)
 {
     const auto row = static_cast<int>(m_assets.size());
 
     beginInsertRows(QModelIndex(), row, row);
 
-    QtAsset asset;
-    asset.m_assetName = QString::fromStdString(assetName);
-    asset.m_qtImage = cvMatToQImage(image);
-    asset.m_number = numberOfInstance;
+    const auto floatPos = asset.m_pos.cast<float>();
 
-    m_assets.emplace_back(asset);
+    QtAsset qtAsset;
+    qtAsset.m_pos = QVector3D{floatPos.x(), floatPos.y(), floatPos.z()};
+    qtAsset.m_rot = asset.m_rot;
+
+    m_assets.emplace_back(qtAsset);
 
     endInsertRows();
 }

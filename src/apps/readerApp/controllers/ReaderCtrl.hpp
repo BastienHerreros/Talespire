@@ -1,6 +1,6 @@
 #pragma once
 
-#include "models/AssetModel.hpp"
+#include "models/LayoutModel.hpp"
 
 #include <libs/core/AssetsDatabase.hpp>
 
@@ -15,15 +15,15 @@ class ReaderCtrl : public QObject
 {
     Q_OBJECT
   private:
-    using AssetModel = app::models::AssetModel;
-    Q_PROPERTY(AssetModel* model READ getModel NOTIFY modelChanged)
+    using LayoutModel = app::models::LayoutModel;
+    Q_PROPERTY(LayoutModel* model READ getModel NOTIFY modelChanged)
     Q_PROPERTY(bool dataBaseInitialized READ isDatabaseInitialized NOTIFY databaseStatusChanged)
 
   public:
     ReaderCtrl();
     ~ReaderCtrl();
 
-    AssetModel* getModel();
+    LayoutModel* getModel();
 
     bool isDatabaseInitialized() const;
 
@@ -42,16 +42,16 @@ class ReaderCtrl : public QObject
 
     void initDatabaseEnd() const;
 
-    void newAssetLoaded(const libs::core::AssetInfo& asset, int numberOfInstance) const;
+    void newAssetLoaded(const libs::core::AssetInfo& asset, const libs::core::Layout& layout) const;
 
   private slots:
-    void onNewAssetLoaded(const libs::core::AssetInfo& asset, int numberOfInstance);
+    void onNewAssetLoaded(const libs::core::AssetInfo& asset, const libs::core::Layout& layout);
 
   private:
     std::thread m_tread;
     std::thread m_databaseTread;
 
-    AssetModel m_model;
+    LayoutModel m_model;
 
     libs::core::AssetsDatabase& m_database;
 };

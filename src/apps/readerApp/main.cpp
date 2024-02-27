@@ -1,5 +1,6 @@
 #include "controllers/ReaderCtrl.hpp"
 #include "models/AssetModel.hpp"
+#include "models/LayoutModel.hpp"
 #include "widgets/ImageDisplayWidget.hpp"
 
 #include <QApplication>
@@ -24,6 +25,7 @@ int main(int argc, char* argv[])
     // Register types
     qmlRegisterType<app::ui::ImageDisplayWidget>("cpp.widgets", 1.0, 0, "ImageDisplayWidget");
     qmlRegisterType<app::models::AssetModel>("cpp.models", 1.0, 0, "AssetModel");
+    qmlRegisterType<app::models::LayoutModel>("cpp.models", 1.0, 0, "LayoutModel");
     qmlRegisterType<app::controllers::ReaderCtrl>("ReaderCtrl", 1.0, 0, "ReaderCtrl");
 
     // load main qml file

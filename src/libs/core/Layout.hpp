@@ -25,6 +25,11 @@ struct Layout
      */
     Layout(const boost::uuids::uuid& assetKindId, uint16_t assetsCount, uint16_t reserved);
 
+    /**
+     * @brief Construct a new Layout object
+     */
+    Layout();
+
     /// The uuid of the asset
     const boost::uuids::uuid m_assetKindId;
 

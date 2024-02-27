@@ -184,75 +184,18 @@ Rectangle {
             ListViewWidget {
                 id: listSlab
 
+                model: readerCtrl.model
                 anchors {
                     fill: parent
                     margins: 10
                 }
-                model: readerCtrl.model
-                delegate: Rectangle {
-                    id: delegate
 
+                delegate: LayoutDelegate {
                     width: listSlab.availableWidth
-                    height: 150
-                    color: "white"
-                    border {
-                        width: 2
-                        color: "darkGrey"
-                    }
-                    radius: 5
+                    assetModel: model.assets
 
-                    RowLayout {
-                        anchors {
-                            fill: parent
-                            margins: 5
-                        }
-
-                        Rectangle {
-                            color: "white"
-                            border {
-                                width: 2
-                                color: "darkGrey"
-                            }
-                            radius: 5
-
-                            Layout.fillHeight: true
-                            Layout.fillWidth: true
-
-                            ImageDisplayWidget {
-                                image: model.qtImage
-
-                                anchors {
-                                    fill: parent
-                                    margins: 2
-                                }
-                            }
-                        }
-
-                        Item {
-                            Layout.fillHeight: true
-                            Layout.fillWidth: true
-
-                            Text {
-                                text: model.assetName
-                                anchors.fill: parent
-                                horizontalAlignment: Qt.AlignLeft
-                                verticalAlignment: Qt.AlignVCenter
-                                font.pixelSize: 20
-                            }
-                        }
-
-                        Item {
-                            Layout.fillHeight: true
-                            Layout.preferredWidth: 30
-
-                            Text {
-                                text: model.numberOfInstance
-                                anchors.fill: parent
-                                horizontalAlignment: Qt.AlignLeft
-                                verticalAlignment: Qt.AlignVCenter
-                                font.pixelSize: 20
-                            }
-                        }
+                    onLayoutSelected: {
+                        listSlab.currentIndex = id;
                     }
                 }
             }

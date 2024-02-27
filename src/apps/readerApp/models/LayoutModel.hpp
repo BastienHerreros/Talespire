@@ -1,57 +1,74 @@
 #pragma once
 
-#include <libs/core/Asset.hpp>
+#include "models/AssetModel.hpp"
+
+#include <libs/core/AssetsDatabase.hpp>
+#include <libs/core/Layout.hpp>
 
 #include <QAbstractListModel>
-#include <QVector3D>
+#include <QImage>
+#include <QVector>
 
+#include <opencv2/core/mat.hpp>
+
+#include <memory>
 #include <vector>
+
+Q_DECLARE_METATYPE(const app::models::AssetModel*)
 
 namespace app {
 namespace models {
 
 /**
- * @struct QtAsset
- * @brief Store the data of an asset in the Qt format
+ * @struct QtLayout
+ * @brief Store the data of a layout in the Qt format
  */
-struct QtAsset
+struct QtLayout
 {
-    /// The position of the asset
-    QVector3D m_pos;
+    /// The image from Qt
+    QImage m_qtImage;
 
-    /// The roation in degree
-    double m_rot;
+    /// The name of the asset
+    QString m_assetName;
+
+    /// The number of instances of that asset
+    int m_number;
+
+    /// Model that contains all the assets of a layout
+    std::unique_ptr<AssetModel> m_assetModel;
 };
 
 /**
- * @class AssetModel
- * @brief Model used to display the assets
+ * @class LayoutModel
+ * @brief Model used to display the layouts
  */
-class AssetModel : public QAbstractListModel
+class LayoutModel : public QAbstractListModel
 {
   private:
     Q_OBJECT
   public:
     /**
-     * @enum AssetModelRoles
+     * @enum LayoutModelRoles
      * @brief Define the data stored in the model
      */
-    enum class AssetModelRoles
+    enum class LayoutModelRoles
     {
-        PoseRole = Qt::UserRole,
-        RotationRole
+        QtImageRole = Qt::UserRole,
+        NameRole,
+        NumberRole,
+        AssetRole
     };
 
     /**
-     * @brief Construct a new AssetModel object
+     * @brief Construct a new LayoutModel object
      * @param [in] parent The parent object
      */
-    explicit AssetModel(QObject* parent = nullptr);
+    explicit LayoutModel(QObject* parent = nullptr);
 
     /**
-     * @brief Destroy the AssetModel object
+     * @brief Destroy the LayoutModel object
      */
-    virtual ~AssetModel() override = default;
+    virtual ~LayoutModel() override = default;
 
     /**
      * @brief Returns the number of rows under the given parent
@@ -76,10 +93,11 @@ class AssetModel : public QAbstractListModel
     QHash<int, QByteArray> roleNames() const final;
 
     /**
-     * @brief Insert a new asset
-     * @param [in] asset The asset to add
+     * @brief Insert a new layout
+     * @param [in] layout The layout to insert
+     * @param [in] info The information of a layout
      */
-    void insertAsset(const libs::core::Asset& asset);
+    void insertLayout(const libs::core::Layout& layout, const libs::core::AssetInfo& info);
 
     /**
      * @brief Clear the model
@@ -88,7 +106,7 @@ class AssetModel : public QAbstractListModel
 
   private:
     /// Sub-images
-    std::vector<QtAsset> m_assets;
+    std::vector<QtLayout> m_layouts;
 };
 }
 }

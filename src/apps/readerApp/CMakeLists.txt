@@ -3,11 +3,13 @@ set(APP_SOURCES
         main.cpp
         controllers/ReaderCtrl.cpp
         models/AssetModel.cpp
+        models/LayoutModel.cpp
         widgets/ImageDisplayWidget.cpp)
 
 set(APP_HEADERS
         controllers/ReaderCtrl.hpp
         models/AssetModel.hpp
+        models/LayoutModel.hpp
         widgets/ImageDisplayWidget.hpp)
 
 set(QML_RESOURCES

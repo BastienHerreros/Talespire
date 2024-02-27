@@ -16,6 +16,7 @@ ReaderCtrl::ReaderCtrl()
   , m_database(libs::core::AssetsDatabase::getInstance())
 {
     qRegisterMetaType<libs::core::AssetInfo>("libs::core::AssetInfo");
+    qRegisterMetaType<libs::core::Layout>("libs::core::Layout");
     QObject::connect(this, &ReaderCtrl::newAssetLoaded, this, &ReaderCtrl::onNewAssetLoaded);
 }
 
@@ -32,7 +33,7 @@ ReaderCtrl::~ReaderCtrl()
     }
 }
 
-ReaderCtrl::AssetModel* ReaderCtrl::getModel() { return &m_model; }
+ReaderCtrl::LayoutModel* ReaderCtrl::getModel() { return &m_model; }
 
 bool ReaderCtrl::isDatabaseInitialized() const { return m_database.isInitialized(); }
 
@@ -95,7 +96,7 @@ void ReaderCtrl::loadSlab(const QString& slabCode)
 
                   if(assetOpt.has_value())
                   {
-                      emit newAssetLoaded(assetOpt.value(), static_cast<int>(layout.m_assetsCount));
+                      emit newAssetLoaded(assetOpt.value(), layout);
                   }
                   else
                   {
@@ -103,7 +104,7 @@ void ReaderCtrl::loadSlab(const QString& slabCode)
                       info.m_name = boost::uuids::to_string(assetId);
                       info.m_icon = cv::Mat::zeros(128, 128, CV_8UC3);
 
-                      emit newAssetLoaded(info, static_cast<int>(layout.m_assetsCount));
+                      emit newAssetLoaded(info, layout);
                   }
               }
           }
@@ -116,9 +117,9 @@ void ReaderCtrl::loadSlab(const QString& slabCode)
       slabCode);
 }
 
-void ReaderCtrl::onNewAssetLoaded(const libs::core::AssetInfo& asset, int numberOfInstance)
+void ReaderCtrl::onNewAssetLoaded(const libs::core::AssetInfo& asset, const libs::core::Layout& layout)
 {
-    m_model.insertAsset(asset.m_name, asset.m_icon, numberOfInstance);
+    m_model.insertLayout(layout, asset);
 }
 
 }

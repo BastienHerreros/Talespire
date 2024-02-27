@@ -77,6 +77,7 @@
         "qqmlapplicationengine": "cpp",
         "qpainter": "cpp",
         "qquickstyle": "cpp",
-        "qqmlcontext": "cpp"
+        "qqmlcontext": "cpp",
+        "qvector": "cpp"
     }
 }
