@@ -1,0 +1,7 @@
+module widgets
+
+ListViewWidget 1.0 ListViewWidget.qml
+PopupWidget 1.0 PopupWidget.qml
+LoadingPopupWidget 1.0 LoadingPopupWidget.qml
+LayoutDelegate 1.0 LayoutDelegate.qml
+AssetDelegate 1.0 AssetDelegate.qml

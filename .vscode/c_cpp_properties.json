@@ -1,0 +1,21 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/src",
+                "${workspaceFolder}/../thirdparties/install/include",
+                "${workspaceFolder}/../thirdparties/install/include/eigen3",
+                "${workspaceFolder}/../thirdparties/install/include/opencv4",
+                "/home/bastien/softwares/qt/5.15.2/gcc_64/include/**",
+                "${workspaceFolder}/src/apps/readerApp"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c17",
+            "cppStandard": "gnu++17",
+            "intelliSenseMode": "linux-gcc-x64"
+        }
+    ],
+    "version": 4
+}

@@ -1,0 +1,51 @@
+helper_add_test(
+    NAME
+        reader_test
+    PREFIX
+        reader
+    SOURCES
+        reader_test.cpp
+    INCLUDE_DIRS
+    LINKS
+        talespire_core
+        talespire_reader
+    DEFINITIONS)
+
+helper_add_test(
+    NAME
+        utils_test
+    PREFIX
+        reader
+    SOURCES
+        utils_test.cpp
+    INCLUDE_DIRS
+    LINKS
+        talespire_core
+        talespire_reader
+    DEFINITIONS)
+
+helper_add_test(
+    NAME
+        gzip_test
+    PREFIX
+        reader
+    SOURCES
+        gzip_test.cpp
+    INCLUDE_DIRS
+    LINKS
+        talespire_core
+        talespire_reader
+    DEFINITIONS)
+
+helper_add_test(
+    NAME
+        base64_test
+    PREFIX
+        reader
+    SOURCES
+        base64_test.cpp
+    INCLUDE_DIRS
+    LINKS
+        talespire_core
+        talespire_reader
+    DEFINITIONS)
