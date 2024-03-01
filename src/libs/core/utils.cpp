@@ -28,9 +28,6 @@ boost::uuids::uuid convertBinToUuid(const char bin[16])
     swap(uuid, result, 4, 5);
     swap(uuid, result, 6, 7);
 
-    libs::core::print("uuid");
-    libs::core::print(result);
-
     return result;
 }
 

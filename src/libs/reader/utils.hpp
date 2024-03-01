@@ -25,7 +25,6 @@ void readBits(std::stringstream& data, T& val)
     }
 
     const auto numByteRead = data.gcount();
-    libs::core::print("readBits => " + std::to_string(numByteRead));
 
     if(numByteRead != sizeof(T))
     {
