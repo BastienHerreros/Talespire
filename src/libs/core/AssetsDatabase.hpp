@@ -7,8 +7,11 @@
 #include <optional>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 namespace libs::core {
+
+using Tag = std::string;
 
 /**
  * @struct AssetInfo
@@ -21,6 +24,18 @@ struct AssetInfo
 
     /// The in-game icon of the asset
     cv::Mat m_icon;
+
+    /// Tags
+    std::vector<Tag> m_tags;
+
+    /// Tag of the group
+    std::string m_groupTag;
+
+    /// In-game folder name
+    std::string m_folder;
+
+    /// Can the asset be interact with
+    bool m_isInteractable;
 };
 
 /**

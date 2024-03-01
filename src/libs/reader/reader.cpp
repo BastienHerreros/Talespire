@@ -7,7 +7,7 @@
 #include <libs/core/log.hpp>
 #include <libs/core/utils.hpp>
 
-#include <bitset>
+#include <iomanip>
 
 namespace libs::reader {
 

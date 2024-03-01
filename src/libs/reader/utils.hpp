@@ -1,5 +1,7 @@
 #pragma once
 
+#include "libs/core/log.hpp"
+
 #include <sstream>
 #include <string>
 
@@ -20,6 +22,14 @@ void readBits(std::stringstream& data, T& val)
     if(data.fail())
     {
         throw std::runtime_error("Cannot read bytes");
+    }
+
+    const auto numByteRead = data.gcount();
+    libs::core::print("readBits => " + std::to_string(numByteRead));
+
+    if(numByteRead != sizeof(T))
+    {
+        throw std::runtime_error("Stream only read " + std::to_string(numByteRead) + " bytes");
     }
 }
 

@@ -106,4 +106,17 @@ BOOST_AUTO_TEST_CASE(test_reader_multiple_layouts)
     BOOST_CHECK_EQUAL(layouts.at(1).m_assets.size(), 4);
 }
 
+BOOST_AUTO_TEST_CASE(test_reader_unique_wall)
+{
+    const std::string slabCode = "```H4sIAAAAAAAACjv369xFJgZGBgaGlf9rH6uUMzgt0v3nsv/F1FCQGAIAAMo3egkoAAAA```";
+
+    const auto layouts = libs::reader::getLayouts(slabCode);
+
+    BOOST_CHECK_EQUAL(layouts.size(), 1);
+    BOOST_CHECK_EQUAL(layouts.front().m_assetKindId,
+                      libs::core::convertStringToUuid("e37dffa9-7724-4200-a22d-fe44bfe89555"));
+    BOOST_CHECK_EQUAL(layouts.front().m_assetsCount, 1);
+    BOOST_CHECK_EQUAL(layouts.front().m_assets.size(), 1);
+}
+
 BOOST_AUTO_TEST_SUITE_END()

@@ -9,11 +9,8 @@ namespace libs::core {
 
 boost::uuids::uuid convertStringToUuid(const std::string& id) { return boost::lexical_cast<boost::uuids::uuid>(id); }
 
-boost::uuids::uuid convertBinToUuid(const std::string& bin)
+boost::uuids::uuid convertBinToUuid(const char bin[16])
 {
-    libs::core::print("bin");
-    libs::core::print(bin);
-
     const auto swap = [](const boost::uuids::uuid& original, boost::uuids::uuid& result, size_t begin, size_t end) {
         for(auto i = 0u; i < end - begin + 1; ++i)
         {
@@ -22,7 +19,7 @@ boost::uuids::uuid convertBinToUuid(const std::string& bin)
     };
 
     boost::uuids::uuid uuid;
-    memcpy(&uuid, bin.data(), 16);
+    memcpy(&uuid, bin, 16);
 
     // Swap first bytes
     boost::uuids::uuid result = uuid;
@@ -31,7 +28,7 @@ boost::uuids::uuid convertBinToUuid(const std::string& bin)
     swap(uuid, result, 4, 5);
     swap(uuid, result, 6, 7);
 
-    libs::core::print("result");
+    libs::core::print("uuid");
     libs::core::print(result);
 
     return result;
