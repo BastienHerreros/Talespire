@@ -7,8 +7,6 @@
 #include <libs/core/log.hpp>
 #include <libs/core/utils.hpp>
 
-#include <iomanip>
-
 namespace libs::reader {
 
 std::string cleanSlabCode(const std::string& slabCode)
