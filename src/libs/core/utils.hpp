@@ -18,6 +18,6 @@ boost::uuids::uuid convertStringToUuid(const std::string& id);
  * @param [in] id The string that contains the byte array
  * @return The converted uuid
  */
-boost::uuids::uuid convertBinToUuid(const std::string& bin);
+boost::uuids::uuid convertBinToUuid(const char bin[16]);
 
 }

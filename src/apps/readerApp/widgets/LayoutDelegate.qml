@@ -12,12 +12,12 @@ ItemDelegate {
 
     property alias assetModel: assetList.model
 
-    height: root.ListView.isCurrentItem ? 500 : 150
+    height: root.ListView.isCurrentItem ? 250 : 75
 
     background: Rectangle {
-        color: root.ListView.isCurrentItem ? "lightGrey" : "white"
+        color: "white"
         border {
-            width: 2
+            width:  root.ListView.isCurrentItem ? 4 : 2
             color: root.ListView.isCurrentItem ? "darkBlue" : "darkGrey"
         }
         radius: 5
@@ -28,59 +28,60 @@ ItemDelegate {
             fill: parent
             margins: 5
         }
-    
-        RowLayout {
+
+        Item {
             Layout.fillHeight: true
             Layout.fillWidth: true
-                
-            Rectangle {
-                color: "white"
-                border {
-                    width: 2
-                    color: "darkGrey"
-                }
-                radius: 5
+            Layout.maximumHeight: 75
 
-                Layout.fillHeight: true
-                Layout.fillWidth: true
+            RowLayout {
+                anchors.fill: parent
+                    
+                Rectangle {
+                    color: "white"
+                    border {
+                        width: 2
+                        color: "darkGrey"
+                    }
+                    radius: 5
 
-                ImageDisplayWidget {
-                    image: model.qtImage
+                    Layout.fillHeight: true
+                    Layout.preferredWidth: height
 
-                    anchors {
-                        fill: parent
-                        margins: 2
+                    ImageDisplayWidget {
+                        image: model.qtImage
+
+                        anchors {
+                            fill: parent
+                            margins: 2
+                        }
                     }
                 }
-            }
-
-            Item {
-                Layout.fillHeight: true
-                Layout.fillWidth: true
 
                 Text {
                     text: model.assetName
-                    anchors.fill: parent
                     horizontalAlignment: Qt.AlignLeft
                     verticalAlignment: Qt.AlignVCenter
-                    font.pixelSize: 20
-                }
-            }
+                    font.pixelSize: 15
 
-            Item {
-                Layout.fillHeight: true
-                Layout.preferredWidth: 30
+                    Layout.fillHeight: true
+                }
+
+                Item {
+                    Layout.fillWidth: true
+                }
 
                 Text {
                     text: model.numberOfInstance
-                    anchors.fill: parent
                     horizontalAlignment: Qt.AlignLeft
                     verticalAlignment: Qt.AlignVCenter
-                    font.pixelSize: 20
+                    font.pixelSize: 15
+
+                    Layout.fillHeight: true
                 }
             }
         }
-
+       
         Rectangle {
             color: "lightGrey"
             border {

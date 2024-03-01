@@ -61,6 +61,17 @@ void AssetsDatabase::init(const std::string& taleweaverFolderPath)
 
                     AssetInfo info;
                     info.m_name = child.get_child("Name").get_value<std::string>();
+                    info.m_folder = child.get_child("Folder").get_value<std::string>();
+                    info.m_groupTag = child.get_child("GroupTag").get_value<std::string>();
+
+                    if(key == "Props")
+                    {
+                        info.m_isInteractable = child.get_child("IsInteractable").get_value<bool>();
+                    }
+                    else
+                    {
+                        info.m_isInteractable = false;
+                    }
 
                     // Read icon
                     {
@@ -100,6 +111,14 @@ void AssetsDatabase::init(const std::string& taleweaverFolderPath)
                         info.m_icon = spriteSheet(cv::Rect(x, y, w, h)).clone();
                     }
 
+                    // Read tags
+                    {
+                        for(const auto& tag : child.get_child("Tags"))
+                        {
+                            info.m_tags.emplace_back(tag.second.get_value<std::string>());
+                        }
+                    }
+
                     m_assetsInfos.insert({id, info});
                 }
             }
@@ -127,5 +146,4 @@ std::optional<AssetInfo> AssetsDatabase::getAsset(const boost::uuids::uuid& id) 
 }
 
 bool AssetsDatabase::isInitialized() const { return m_isInitialize; }
-
 }

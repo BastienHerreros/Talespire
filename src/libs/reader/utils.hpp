@@ -21,6 +21,13 @@ void readBits(std::stringstream& data, T& val)
     {
         throw std::runtime_error("Cannot read bytes");
     }
+
+    const auto numByteRead = data.gcount();
+
+    if(numByteRead != sizeof(T))
+    {
+        throw std::runtime_error("Stream only read " + std::to_string(numByteRead) + " bytes");
+    }
 }
 
 /**
