@@ -17,6 +17,7 @@ class ReaderCtrl : public QObject
   private:
     using LayoutModel = app::models::LayoutModel;
     Q_PROPERTY(LayoutModel* model READ getModel NOTIFY modelChanged)
+    Q_PROPERTY(LayoutModel* fullModel READ getFullModel NOTIFY fullModelChanged)
     Q_PROPERTY(bool dataBaseInitialized READ isDatabaseInitialized NOTIFY databaseStatusChanged)
 
   public:
@@ -24,6 +25,8 @@ class ReaderCtrl : public QObject
     ~ReaderCtrl();
 
     LayoutModel* getModel();
+
+    LayoutModel* getFullModel();
 
     bool isDatabaseInitialized() const;
 
@@ -33,6 +36,8 @@ class ReaderCtrl : public QObject
 
   signals:
     void modelChanged() const;
+
+    void fullModelChanged() const;
 
     void databaseStatusChanged() const;
 
@@ -47,11 +52,15 @@ class ReaderCtrl : public QObject
   private slots:
     void onNewAssetLoaded(const libs::core::AssetInfo& asset, const libs::core::Layout& layout);
 
+    void onInitDatabaseEnd();
+
   private:
     std::thread m_tread;
     std::thread m_databaseTread;
 
     LayoutModel m_model;
+
+    LayoutModel m_fullModel;
 
     libs::core::AssetsDatabase& m_database;
 };

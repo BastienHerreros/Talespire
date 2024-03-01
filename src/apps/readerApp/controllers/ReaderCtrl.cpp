@@ -18,6 +18,8 @@ ReaderCtrl::ReaderCtrl()
     qRegisterMetaType<libs::core::AssetInfo>("libs::core::AssetInfo");
     qRegisterMetaType<libs::core::Layout>("libs::core::Layout");
     QObject::connect(this, &ReaderCtrl::newAssetLoaded, this, &ReaderCtrl::onNewAssetLoaded);
+    QObject::connect(
+      this, &ReaderCtrl::initDatabaseEnd, this, &ReaderCtrl::onInitDatabaseEnd, Qt::ConnectionType::QueuedConnection);
 }
 
 ReaderCtrl::~ReaderCtrl()
@@ -34,6 +36,8 @@ ReaderCtrl::~ReaderCtrl()
 }
 
 ReaderCtrl::LayoutModel* ReaderCtrl::getModel() { return &m_model; }
+
+ReaderCtrl::LayoutModel* ReaderCtrl::getFullModel() { return &m_fullModel; }
 
 bool ReaderCtrl::isDatabaseInitialized() const { return m_database.isInitialized(); }
 
@@ -120,6 +124,21 @@ void ReaderCtrl::loadSlab(const QString& slabCode)
 void ReaderCtrl::onNewAssetLoaded(const libs::core::AssetInfo& asset, const libs::core::Layout& layout)
 {
     m_model.insertLayout(layout, asset);
+}
+
+void ReaderCtrl::onInitDatabaseEnd()
+{
+    for(const auto& [assetId, asset] : m_database.map())
+    {
+        if(asset.m_type == libs::core::AssetType::Creature)
+        {
+            continue;
+        }
+
+        libs::core::Layout layout(assetId, 1, 0);
+        m_fullModel.insertLayout(layout, asset);
+    }
+    emit fullModelChanged();
 }
 
 }

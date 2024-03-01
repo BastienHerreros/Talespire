@@ -25,6 +25,9 @@ namespace models {
  */
 struct QtLayout
 {
+    /// UUID of the asset
+    // boost::uuids::uuid m_uuid;
+
     /// The image from Qt
     QImage m_qtImage;
 

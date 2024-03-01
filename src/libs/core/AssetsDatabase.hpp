@@ -14,12 +14,26 @@ namespace libs::core {
 using Tag = std::string;
 
 /**
+ * @enum AssetType
+ * @brief Define the type of the loaded asset
+ */
+enum class AssetType
+{
+    Tile,
+    Prop,
+    Creature
+};
+
+/**
  * @struct AssetInfo
  * @brief Define the information of an assets retrieved in the json file
  */
 struct AssetInfo
 {
-    /// Tha name of the asset
+    /// The type of the asset
+    AssetType m_type;
+
+    /// The name of the asset
     std::string m_name;
 
     /// The in-game icon of the asset
@@ -45,6 +59,9 @@ struct AssetInfo
 class AssetsDatabase
 {
   public:
+    /// Type of the map that will store the json data
+    using AssetMap = std::unordered_map<boost::uuids::uuid, AssetInfo, boost::hash<boost::uuids::uuid>>;
+
     /**
      * @brief Get the Instance object
      * @return The unique instance
@@ -70,6 +87,12 @@ class AssetsDatabase
      */
     bool isInitialized() const;
 
+    /**
+     * @brief Get the full map
+     * @return The full map
+     */
+    const AssetMap& map() const;
+
   private:
     /**
      * @brief Construct a new Assets Database object
@@ -80,7 +103,7 @@ class AssetsDatabase
     static constexpr auto s_DATA_FILENAME{"index.json"};
 
     /// Extracted information from the json file
-    std::unordered_map<boost::uuids::uuid, AssetInfo, boost::hash<boost::uuids::uuid>> m_assetsInfos;
+    AssetMap m_assetsInfos;
 
     /// Whether the database was initialized or not
     bool m_isInitialize{false};

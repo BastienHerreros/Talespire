@@ -65,6 +65,7 @@ void LayoutModel::insertLayout(const libs::core::Layout& layout, const libs::cor
     beginInsertRows(QModelIndex(), row, row);
 
     QtLayout& qtLayout = m_layouts.emplace_back();
+    // qtLayout.m_uuid = layout.m_assetKindId;
     qtLayout.m_assetName = QString::fromStdString(info.m_name);
     qtLayout.m_qtImage = cvMatToQImage(info.m_icon);
     qtLayout.m_number = static_cast<int>(layout.m_assetsCount);
