@@ -274,7 +274,7 @@ Rectangle {
                             enabled: comboBoxReplaceFrom.currentIndex !== -1 && comboBoxReplaceTo.currentIndex !== -1 
 
                             onClicked: {
-
+                                readerCtrl.replaceAsset(comboBoxReplaceFrom.currentIndex, comboBoxReplaceTo.currentIndex);
                             }
                         }
                     }
@@ -307,13 +307,18 @@ Rectangle {
                     fill: parent
                     margins: 10
                 }
+                currentIndex: -1
 
                 delegate: LayoutDelegate {
                     width: listSlab.availableWidth
                     assetModel: model.assets
 
                     onLayoutSelected: {
-                        listSlab.currentIndex = id;
+                        if(listSlab.currentIndex === id) {
+                            listSlab.currentIndex = -1;
+                        } else {
+                            listSlab.currentIndex = id;
+                        }
                     }
                 }
             }

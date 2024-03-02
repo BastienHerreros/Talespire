@@ -30,6 +30,12 @@ struct Layout
      */
     Layout();
 
+    /**
+     * @brief Replace the uuid
+     * @param [in] newId The new id
+     */
+    void replaceUUID(const boost::uuids::uuid& newId);
+
     /// The uuid of the asset
     const boost::uuids::uuid m_assetKindId;
 

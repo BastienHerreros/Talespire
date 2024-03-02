@@ -20,4 +20,10 @@ Layout::Layout(const boost::uuids::uuid& assetKindId, uint16_t assetsCount, uint
     m_assets.reserve(assetsCount);
 }
 
+void Layout::replaceUUID(const boost::uuids::uuid& newId)
+{
+    boost::uuids::uuid& id = const_cast<boost::uuids::uuid&>(m_assetKindId);
+    id = newId;
+}
+
 }

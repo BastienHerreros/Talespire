@@ -30,9 +30,11 @@ class ReaderCtrl : public QObject
 
     bool isDatabaseInitialized() const;
 
+    Q_INVOKABLE void initDatabase(const QUrl& path);
+
     Q_INVOKABLE void loadSlab(const QString& slabCode);
 
-    Q_INVOKABLE void initDatabase(const QUrl& path);
+    Q_INVOKABLE void replaceAsset(int indexFrom, int indexTo);
 
   signals:
     void modelChanged() const;
@@ -63,6 +65,9 @@ class ReaderCtrl : public QObject
     LayoutModel m_fullModel;
 
     libs::core::AssetsDatabase& m_database;
+
+    std::vector<libs::core::Layout> m_lastLoadedSlab;
+    std::vector<libs::core::Layout> m_allAssets;
 };
 
 }

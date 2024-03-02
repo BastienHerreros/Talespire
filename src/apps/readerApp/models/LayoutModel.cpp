@@ -42,6 +42,9 @@ QVariant LayoutModel::data(const QModelIndex& index, int role) const
         case LayoutModelRoles::AssetRole: {
             return QVariant::fromValue(m_layouts.at(static_cast<size_t>(index.row())).m_assetModel.get());
         }
+        case LayoutModelRoles::AssetTypeRole: {
+            return QVariant::fromValue(m_layouts.at(static_cast<size_t>(index.row())).m_assetType);
+        }
         default: {
             return QVariant();
         }
@@ -55,20 +58,25 @@ QHash<int, QByteArray> LayoutModel::roleNames() const
     roles[static_cast<int>(LayoutModelRoles::NameRole)] = "assetName";
     roles[static_cast<int>(LayoutModelRoles::NumberRole)] = "numberOfInstance";
     roles[static_cast<int>(LayoutModelRoles::AssetRole)] = "assets";
+    roles[static_cast<int>(LayoutModelRoles::AssetTypeRole)] = "assetType";
     return roles;
 }
 
 void LayoutModel::insertLayout(const libs::core::Layout& layout, const libs::core::AssetInfo& info)
 {
+    static const QString typeNames[3] = {"Tile", "Prop", "Creature"};
+
     const auto row = static_cast<int>(m_layouts.size());
 
     beginInsertRows(QModelIndex(), row, row);
 
     QtLayout& qtLayout = m_layouts.emplace_back();
-    // qtLayout.m_uuid = layout.m_assetKindId;
+    qtLayout.m_uuid = layout.m_assetKindId;
     qtLayout.m_assetName = QString::fromStdString(info.m_name);
     qtLayout.m_qtImage = cvMatToQImage(info.m_icon);
     qtLayout.m_number = static_cast<int>(layout.m_assetsCount);
+    qtLayout.m_assetType = typeNames[static_cast<size_t>(info.m_type)];
+    qtLayout.m_enumType = info.m_type;
 
     qtLayout.m_assetModel = std::make_unique<AssetModel>();
     for(const auto& asset : layout.m_assets)

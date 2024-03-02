@@ -86,14 +86,15 @@ void ReaderCtrl::loadSlab(const QString& slabCode)
     }
 
     m_model.clear();
+    m_lastLoadedSlab.clear();
 
     m_tread = std::thread(
       [this](QString localSlabCode) {
           try
           {
-              const auto layouts = libs::reader::getLayouts(localSlabCode.toStdString());
+              m_lastLoadedSlab = libs::reader::getLayouts(localSlabCode.toStdString());
 
-              for(const auto& layout : layouts)
+              for(const auto& layout : m_lastLoadedSlab)
               {
                   const auto& assetId = layout.m_assetKindId;
                   const auto assetOpt = m_database.getAsset(assetId);
@@ -121,6 +122,28 @@ void ReaderCtrl::loadSlab(const QString& slabCode)
       slabCode);
 }
 
+void ReaderCtrl::replaceAsset(int indexFrom, int indexTo)
+{
+    if(indexFrom < 0 || indexTo < 0)
+    {
+        return;
+    }
+
+    const auto uIndexFrom = static_cast<size_t>(indexFrom);
+    const auto uIndexTo = static_cast<size_t>(indexTo);
+
+    if(uIndexFrom >= m_lastLoadedSlab.size() || uIndexTo >= m_allAssets.size())
+    {
+        return;
+    }
+
+    m_lastLoadedSlab.at(uIndexFrom).replaceUUID(m_allAssets.at(uIndexTo).m_assetKindId);
+
+    // const QString newSlabCode = ""; // TODO
+
+    // loadSlab(newSlabCode);
+}
+
 void ReaderCtrl::onNewAssetLoaded(const libs::core::AssetInfo& asset, const libs::core::Layout& layout)
 {
     m_model.insertLayout(layout, asset);
@@ -137,6 +160,8 @@ void ReaderCtrl::onInitDatabaseEnd()
 
         libs::core::Layout layout(assetId, 1, 0);
         m_fullModel.insertLayout(layout, asset);
+
+        m_allAssets.emplace_back(layout);
     }
     emit fullModelChanged();
 }

@@ -88,12 +88,12 @@ void AssetsDatabase::init(const std::string& taleweaverFolderPath)
                         auto it = spriteSheetRoot.begin();
                         std::advance(it, spriteSheetId);
 
-                        const auto spritesheetFilename = it->second.get_child("Path").get_value<std::string>();
+                        const auto spritesheetFilename =
+                          dirIt.path().parent_path() / it->second.get_child("Path").get_value<std::string>();
 
                         if(cache.count(spritesheetFilename) == 0)
                         {
-                            const auto image =
-                              cv::imread(dirIt.path().parent_path() / spritesheetFilename, cv::IMREAD_COLOR);
+                            const auto image = cv::imread(spritesheetFilename, cv::IMREAD_COLOR);
 
                             cache.insert({spritesheetFilename, image.clone()});
                         }
