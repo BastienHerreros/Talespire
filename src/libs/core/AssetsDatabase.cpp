@@ -106,14 +106,12 @@ void AssetsDatabase::init(const std::string& taleweaverFolderPath)
                         const double relativeW = iconRoot.get_child("Region").get_child("width").get_value<double>();
                         const double relativeH = iconRoot.get_child("Region").get_child("height").get_value<double>();
 
-                        const double wSpriteSheet = static_cast<double>(spriteSheet.cols);
                         const double hSpriteSheet = static_cast<double>(spriteSheet.rows);
 
-                        const int x = static_cast<int>(relativeX * hSpriteSheet); // col
-                        const int y =
-                          static_cast<int>(hSpriteSheet - relativeY * wSpriteSheet - 128); // row => top left corner
-                        const int w = static_cast<int>(relativeW * wSpriteSheet);          // nb col
-                        const int h = static_cast<int>(relativeH * hSpriteSheet);          // nb row
+                        const int x = static_cast<int>(relativeX);                      // col
+                        const int y = static_cast<int>(hSpriteSheet - relativeY - 128); // row => top left corner
+                        const int w = static_cast<int>(relativeW);                      // nb col
+                        const int h = static_cast<int>(relativeH);                      // nb row
 
                         info.m_icon = spriteSheet(cv::Rect(x, y, w, h)).clone();
                     }

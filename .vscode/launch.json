@@ -9,7 +9,7 @@
             "type": "cppdbg",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "/home/bastien/projects/talespire/build/Linux-x86_64/reader_reader_test",
+            "program": "/home/bastien/projects/talespire/build/Linux-x86_64/readerApp",
             "externalConsole": false,
             "cwd": "${workspaceFolder}",
             "logging": {
