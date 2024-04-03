@@ -7,7 +7,9 @@ Dialog {
 
     implicitHeight: 500
     implicitWidth: 500
-
+    closePolicy: Popup.NoAutoClose
+    dim: true
+    
     background: Rectangle {
         radius: 10
         color: "lightGrey"
