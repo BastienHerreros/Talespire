@@ -30,6 +30,10 @@ Rectangle {
         onInitDatabaseEnd: {
             loadingPopup.close();
         }
+
+        onNewSlabCode: {
+            newSlabCodeTextField.text = newCode;
+        }
     }
 
     component Title: Rectangle {
@@ -227,57 +231,81 @@ Rectangle {
                     radius: 5
 
                     Layout.fillWidth: true
-                    Layout.preferredHeight: rowReplace.implicitHeight + 40
+                    Layout.preferredHeight: colReplace.implicitHeight + 40
 
-                    RowLayout {
-                        id: rowReplace
-
-                        spacing: 10
+                    ColumnLayout {
+                        id: colReplace
+                        
                         anchors {
                             left: parent.left
                             right: parent.right
                             margins: 20
                             verticalCenter: parent.verticalCenter
                         }
-                        height: 40
+                        height: 80
 
-                        Label {
-                            text: "Replace "
-                            verticalAlignment: Text.AlignVCenter
-                            wrapMode: Text.WordWrap
-                        }
 
-                        ComboBox {
-                            id: comboBoxReplaceFrom
+                        RowLayout {
+                            spacing: 10
+                            
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
 
-                            model: readerCtrl.model
-                            textRole: "assetName"
-                            valueRole: "assetName"
-                        }
+                            Label {
+                                text: "Replace "
+                                verticalAlignment: Text.AlignVCenter
+                                wrapMode: Text.WordWrap
+                            }
 
-                        Label {
-                            text: "with"
-                            verticalAlignment: Text.AlignVCenter
-                            wrapMode: Text.WordWrap
-                        }
+                            ComboBox {
+                                id: comboBoxReplaceFrom
 
-                        ComboBox {
-                            id: comboBoxReplaceTo
+                                model: readerCtrl.model
+                                textRole: "assetName"
+                                valueRole: "assetName"
+                            }
 
-                            model: readerCtrl.fullModel
-                            textRole: "assetName"
-                            valueRole: "assetName"
-                        }
+                            Label {
+                                text: "with"
+                                verticalAlignment: Text.AlignVCenter
+                                wrapMode: Text.WordWrap
+                            }
 
-                        Button {
-                            text: "Replace"
-                            enabled: comboBoxReplaceFrom.currentIndex !== -1 && comboBoxReplaceTo.currentIndex !== -1 
+                            ComboBox {
+                                id: comboBoxReplaceTo
 
-                            onClicked: {
-                                readerCtrl.replaceAsset(comboBoxReplaceFrom.currentIndex, comboBoxReplaceTo.currentIndex);
+                                model: readerCtrl.fullModel
+                                textRole: "assetName"
+                                valueRole: "assetName"
+                            }
+
+                            Button {
+                                text: "Replace"
+                                enabled: comboBoxReplaceFrom.currentIndex !== -1 && comboBoxReplaceTo.currentIndex !== -1 
+
+                                onClicked: {
+                                    readerCtrl.replaceAsset(comboBoxReplaceFrom.currentIndex, comboBoxReplaceTo.currentIndex);
+                                }
                             }
                         }
+
+                        RowLayout {
+                            spacing: 10
+
+                            Label {
+                                text: "New slab code"
+                                verticalAlignment: Text.AlignVCenter
+                                wrapMode: Text.WordWrap
+                            }
+
+                            TextField {
+                                id: newSlabCodeTextField
+
+                                Layout.fillWidth: true
+                            }
+                        }   
                     }
+                   
                 }
 
                 Item {

@@ -51,6 +51,8 @@ class ReaderCtrl : public QObject
 
     void newAssetLoaded(const libs::core::AssetInfo& asset, const libs::core::Layout& layout) const;
 
+    void newSlabCode(const QString& newCode) const;
+
   private slots:
     void onNewAssetLoaded(const libs::core::AssetInfo& asset, const libs::core::Layout& layout);
 

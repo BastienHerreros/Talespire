@@ -1,6 +1,7 @@
 #include "controllers/ReaderCtrl.hpp"
 
 #include <libs/reader/reader.hpp>
+#include <libs/reader/writer.hpp>
 
 #include <QSettings>
 #include <QUrl>
@@ -139,9 +140,11 @@ void ReaderCtrl::replaceAsset(int indexFrom, int indexTo)
 
     m_lastLoadedSlab.at(uIndexFrom).replaceUUID(m_allAssets.at(uIndexTo).m_assetKindId);
 
-    // const QString newSlabCode = ""; // TODO
+    const QString newCode = QString::fromStdString(libs::reader::saveLayouts(m_lastLoadedSlab));
 
-    // loadSlab(newSlabCode);
+    loadSlab(newCode);
+
+    emit newSlabCode(newCode);
 }
 
 void ReaderCtrl::onNewAssetLoaded(const libs::core::AssetInfo& asset, const libs::core::Layout& layout)
