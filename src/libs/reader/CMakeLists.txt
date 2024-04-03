@@ -1,12 +1,14 @@
 set(READER_SOURCES
             base64.cpp
             gzip.cpp
-            reader.cpp)
+            reader.cpp
+            writer.cpp)
 
 set(READER_HEADERS
             base64.hpp
             gzip.hpp
-            reader.hpp)
+            reader.hpp
+            writer.hpp)
 
 helper_add_library(talespire_reader
     SOURCES
