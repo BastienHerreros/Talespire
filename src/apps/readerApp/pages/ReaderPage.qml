@@ -257,12 +257,13 @@ Rectangle {
                                 wrapMode: Text.WordWrap
                             }
 
-                            ComboBox {
+                            SearchableComboBox {
                                 id: comboBoxReplaceFrom
 
-                                model: readerCtrl.model
+                                imodel: readerCtrl.model
                                 textRole: "assetName"
-                                valueRole: "assetName"
+                                valueRole: "listIndex"
+                                width: 200
                             }
 
                             Label {
@@ -271,20 +272,21 @@ Rectangle {
                                 wrapMode: Text.WordWrap
                             }
 
-                            ComboBox {
+                            SearchableComboBox {
                                 id: comboBoxReplaceTo
 
-                                model: readerCtrl.fullModel
+                                imodel: readerCtrl.fullModel
                                 textRole: "assetName"
-                                valueRole: "assetName"
+                                valueRole: "listIndex"
+                                width: 200
                             }
 
                             Button {
                                 text: "Replace"
-                                enabled: comboBoxReplaceFrom.currentIndex !== -1 && comboBoxReplaceTo.currentIndex !== -1 
+                                enabled: comboBoxReplaceFrom.currentValue !== -1 && comboBoxReplaceTo.currentValue !== -1 
 
                                 onClicked: {
-                                    readerCtrl.replaceAsset(comboBoxReplaceFrom.currentIndex, comboBoxReplaceTo.currentIndex);
+                                    readerCtrl.replaceAsset(comboBoxReplaceFrom.currentValue, comboBoxReplaceTo.currentValue);
                                 }
                             }
                         }

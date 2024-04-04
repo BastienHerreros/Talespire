@@ -30,6 +30,9 @@ QVariant LayoutModel::data(const QModelIndex& index, int role) const
 
     switch(static_cast<LayoutModelRoles>(role))
     {
+        case LayoutModelRoles::IndexRole: {
+            return QVariant::fromValue(m_layouts.at(static_cast<size_t>(index.row())).m_index);
+        }
         case LayoutModelRoles::QtImageRole: {
             return QVariant::fromValue(m_layouts.at(static_cast<size_t>(index.row())).m_qtImage);
         }
@@ -54,6 +57,7 @@ QVariant LayoutModel::data(const QModelIndex& index, int role) const
 QHash<int, QByteArray> LayoutModel::roleNames() const
 {
     QHash<int, QByteArray> roles;
+    roles[static_cast<int>(LayoutModelRoles::IndexRole)] = "listIndex";
     roles[static_cast<int>(LayoutModelRoles::QtImageRole)] = "qtImage";
     roles[static_cast<int>(LayoutModelRoles::NameRole)] = "assetName";
     roles[static_cast<int>(LayoutModelRoles::NumberRole)] = "numberOfInstance";
@@ -71,6 +75,7 @@ void LayoutModel::insertLayout(const libs::core::Layout& layout, const libs::cor
     beginInsertRows(QModelIndex(), row, row);
 
     QtLayout& qtLayout = m_layouts.emplace_back();
+    qtLayout.m_index = row;
     qtLayout.m_uuid = layout.m_assetKindId;
     qtLayout.m_assetName = QString::fromStdString(info.m_name);
     qtLayout.m_qtImage = cvMatToQImage(info.m_icon);

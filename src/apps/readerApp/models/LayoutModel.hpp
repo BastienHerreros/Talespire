@@ -25,6 +25,9 @@ namespace models {
  */
 struct QtLayout
 {
+    /// Index in the list
+    int m_index;
+
     /// UUID of the asset
     boost::uuids::uuid m_uuid;
 
@@ -62,7 +65,8 @@ class LayoutModel : public QAbstractListModel
      */
     enum class LayoutModelRoles
     {
-        QtImageRole = Qt::UserRole,
+        IndexRole = Qt::UserRole,
+        QtImageRole,
         NameRole,
         NumberRole,
         AssetRole,

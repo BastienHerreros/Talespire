@@ -6,6 +6,7 @@
 #include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <QSortFilterProxyModel>
 
 int main(int argc, char* argv[])
 {
@@ -24,6 +25,7 @@ int main(int argc, char* argv[])
 
     // Register types
     qmlRegisterType<app::ui::ImageDisplayWidget>("cpp.widgets", 1.0, 0, "ImageDisplayWidget");
+    qmlRegisterType<QSortFilterProxyModel>("cpp.models", 1.0, 0, "SortFilterProxyModel");
     qmlRegisterType<app::models::AssetModel>("cpp.models", 1.0, 0, "AssetModel");
     qmlRegisterType<app::models::LayoutModel>("cpp.models", 1.0, 0, "LayoutModel");
     qmlRegisterType<app::controllers::ReaderCtrl>("ReaderCtrl", 1.0, 0, "ReaderCtrl");
