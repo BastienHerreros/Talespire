@@ -8,11 +8,12 @@ ComboBox {
     id: control
 
     property var imodel
+    property var regEx: new RegExp(".+")
     
     model: SortFilterProxyModel {
         sourceModel: imodel
         filterRole: 258
-        filterRegExp: new RegExp('\\b' + filterConditionText.text + '\\b', 'i')
+        filterRegExp: regEx
         filterCaseSensitivity: Qt.CaseInsensitive
     }
 
@@ -34,6 +35,18 @@ ComboBox {
         font: control.font
         color: "black"
         verticalAlignment: Text.AlignVCenter
+
+        Keys.onReleased: {
+            if(!list.opened) {
+                list.open();
+            }
+            
+            control.updateRegex();
+        }
+
+        onPressed: {
+            list.open();
+        }
     }
 
     background: Rectangle {
@@ -45,11 +58,12 @@ ComboBox {
     }
 
     popup: Popup {
+        id: list
+
         y: control.height - 1
         width: control.width
         implicitHeight: contentItem.implicitHeight
         padding: 1
-        visible: filterConditionText.focus
 
         contentItem: ListView {
             clip: true
@@ -63,6 +77,14 @@ ComboBox {
         background: Rectangle {
             border.color: "#21be2b"
             radius: 2
+        }
+    }
+
+    function updateRegex() {
+        if(filterConditionText.text === "") {
+            control.regEx = new RegExp(".+")
+        } else {
+            control.regEx = new RegExp('\\b' + filterConditionText.text + '\\b', 'i')
         }
     }
 }

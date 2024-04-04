@@ -1,5 +1,6 @@
 #include "controllers/ReaderCtrl.hpp"
 
+#include <libs/core/log.hpp>
 #include <libs/reader/reader.hpp>
 #include <libs/reader/writer.hpp>
 
@@ -129,6 +130,8 @@ void ReaderCtrl::replaceAsset(int indexFrom, int indexTo)
     {
         return;
     }
+
+    libs::core::print("Replace " + std::to_string(indexFrom) + " to " + std::to_string(indexTo));
 
     const auto uIndexFrom = static_cast<size_t>(indexFrom);
     const auto uIndexTo = static_cast<size_t>(indexTo);
