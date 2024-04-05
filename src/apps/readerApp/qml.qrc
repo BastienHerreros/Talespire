@@ -11,6 +11,7 @@
         <file>widgets/AssetDelegate.qml</file>
         <file>widgets/PopupWidget.qml</file>
         <file>widgets/LoadingPopupWidget.qml</file>
+        <file>widgets/SearchableComboBox.qml</file>
     </qresource>
 
     <qresource prefix="/icons">

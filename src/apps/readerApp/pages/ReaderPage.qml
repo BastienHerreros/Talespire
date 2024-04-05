@@ -30,6 +30,42 @@ Rectangle {
         onInitDatabaseEnd: {
             loadingPopup.close();
         }
+
+        onNewSlabCode: {
+            newSlabCodeTextField.text = newCode;
+        }
+    }
+
+    component Title: Rectangle {
+        property alias text: labelTitle.text
+
+        color: "lightGrey"
+        border {
+            width: 2
+            color: "black"
+        }
+        radius: 5
+
+        Layout.fillWidth: true
+        Layout.preferredHeight: labelTitle.implicitHeight
+
+        Label {
+            id: labelTitle
+
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+            wrapMode: Text.WordWrap
+            font {
+                bold: true
+                pixelSize: 15
+            }
+            anchors {
+                left: parent.left
+                right: parent.right
+                margins: 2
+                centerIn: parent
+            }
+        }
     }
 
     RowLayout {
@@ -40,131 +76,243 @@ Rectangle {
         spacing: 10
 
         //Left panel
-        Rectangle {
-            color: "lightGrey"
-            border {
-                width: 2
-                color: "black"
-            }
-            radius: 5
 
+        Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            GridLayout {
-                id: gridHeader
+            ColumnLayout {
+                anchors.fill: parent
 
-                columns: 4
-                rows: 2
-                columnSpacing: 10
-                rowSpacing: 10
-                anchors {
-                    left: parent.left
-                    right: parent.right
-                    margins: 20
-                }
-                height: 80
-
-                readonly property real availableWidth: gridHeader.width - gridHeader.columnSpacing * (gridHeader.columns - 1)
-                readonly property real availableHeight: gridHeader.height - gridHeader.rowSpacing * (gridHeader.columns - 1)
-                readonly property real cellWidth: gridHeader.availableWidth / gridHeader.columns
-                readonly property real cellHeight: gridHeader.availableHeight / gridHeader.rows
-
-                function getPrefWidth(item){
-                    return cellWidth * item.Layout.columnSpan + (item.Layout.columnSpan - 1) * gridHeader.columnSpacing
+                Title {
+                    text: "Import"
                 }
 
-                function getPrefHeight(item){
-                    return cellHeight * item.Layout.rowSpan + (item.Layout.rowSpan - 1) * gridHeader.rowSpacing
-                }
+                Rectangle {
+                    color: "lightGrey"
+                    border {
+                        width: 2
+                        color: "black"
+                    }
+                    radius: 5
 
-                Label {
-                    text: "Taleweaver folder"
-                    verticalAlignment: Text.AlignVCenter
-                    wrapMode: Text.WordWrap
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: gridImport.implicitHeight + 40
 
-                    Layout.row: 0
-                    Layout.column: 0
-                    Layout.preferredWidth: gridHeader.getPrefWidth(this)
-                    Layout.preferredHeight: gridHeader.getPrefHeight(this)
-                    Layout.alignment: Qt.AlignLeft
-                }
+                    GridLayout {
+                        id: gridImport
 
-                TextField {
-                    id: taleweaverPath
+                        columns: 4
+                        rows: 2
+                        columnSpacing: 10
+                        rowSpacing: 10
+                        anchors {
+                            left: parent.left
+                            right: parent.right
+                            margins: 20
+                            verticalCenter: parent.verticalCenter
+                        }
+                        height: 80
 
-                    text : settings.taleWeaver
+                        readonly property real availableWidth: gridImport.width - gridImport.columnSpacing * (gridImport.columns - 1)
+                        readonly property real availableHeight: gridImport.height - gridImport.rowSpacing * (gridImport.columns - 1)
+                        readonly property real cellWidth: gridImport.availableWidth / gridImport.columns
+                        readonly property real cellHeight: gridImport.availableHeight / gridImport.rows
 
-                    Layout.row: 0
-                    Layout.column: 1
-                    Layout.preferredWidth: gridHeader.getPrefWidth(this)
-                    Layout.preferredHeight: gridHeader.getPrefHeight(this)
-                }
+                        function getPrefWidth(item){
+                            return cellWidth * item.Layout.columnSpan + (item.Layout.columnSpan - 1) * gridImport.columnSpacing
+                        }
 
-                Button {
-                    text: "Browse..."
+                        function getPrefHeight(item){
+                            return cellHeight * item.Layout.rowSpan + (item.Layout.rowSpan - 1) * gridImport.rowSpacing
+                        }
 
-                    Layout.row: 0
-                    Layout.column: 2
-                    Layout.preferredWidth: gridHeader.getPrefWidth(this)
-                    Layout.preferredHeight: gridHeader.getPrefHeight(this)
+                        Label {
+                            text: "Taleweaver folder"
+                            verticalAlignment: Text.AlignVCenter
+                            wrapMode: Text.WordWrap
 
-                    onClicked: {
-                        folderDialog.open();
+                            Layout.row: 0
+                            Layout.column: 0
+                            Layout.preferredWidth: gridImport.getPrefWidth(this)
+                            Layout.preferredHeight: gridImport.getPrefHeight(this)
+                            Layout.alignment: Qt.AlignLeft
+                        }
+
+                        TextField {
+                            id: taleweaverPath
+
+                            text : settings.taleWeaver
+
+                            Layout.row: 0
+                            Layout.column: 1
+                            Layout.preferredWidth: gridImport.getPrefWidth(this)
+                            Layout.preferredHeight: gridImport.getPrefHeight(this)
+                        }
+
+                        Button {
+                            text: "Browse..."
+
+                            Layout.row: 0
+                            Layout.column: 2
+                            Layout.preferredWidth: gridImport.getPrefWidth(this)
+                            Layout.preferredHeight: gridImport.getPrefHeight(this)
+
+                            onClicked: {
+                                folderDialog.open();
+                            }
+                        }
+
+                        Button {
+                            text: "Load"
+
+                            Layout.row: 0
+                            Layout.column: 3
+                            Layout.preferredWidth: gridImport.getPrefWidth(this)
+                            Layout.preferredHeight: gridImport.getPrefHeight(this)
+
+                            onClicked: {
+                                settings.taleWeaver = taleweaverPath.text;
+                                readerCtrl.initDatabase(taleweaverPath.text);
+                            }
+                        }
+
+                        Label {
+                            text: "Slab code"
+                            verticalAlignment: Text.AlignVCenter
+                            wrapMode: Text.WordWrap
+
+                            Layout.row: 1
+                            Layout.column: 0
+                            Layout.preferredWidth: gridImport.getPrefWidth(this)
+                            Layout.preferredHeight: gridImport.getPrefHeight(this)
+                            Layout.alignment: Qt.AlignLeft
+                        }
+
+                        TextField {
+                            id: slabCode
+
+                            placeholderText : "paste taleweaver folder path here"
+                            enabled: readerCtrl.dataBaseInitialized
+
+                            Layout.row: 1
+                            Layout.column: 1
+                            Layout.columnSpan: 2
+                            Layout.preferredWidth: gridImport.getPrefWidth(this)
+                            Layout.preferredHeight: gridImport.getPrefHeight(this)
+                        }
+
+                        Button {
+                            text: "Convert"
+                            enabled: readerCtrl.dataBaseInitialized
+
+                            Layout.row: 1
+                            Layout.column: 3
+                            Layout.preferredWidth: gridImport.getPrefWidth(this)
+                            Layout.preferredHeight: gridImport.getPrefHeight(this)
+
+                            onClicked: {
+                                readerCtrl.loadSlab(slabCode.text);
+                            }
+                        }
                     }
                 }
 
-                Button {
-                    text: "Load"
+                Title {
+                    text: "Replace"
+                }
 
-                    Layout.row: 0
-                    Layout.column: 3
-                    Layout.preferredWidth: gridHeader.getPrefWidth(this)
-                    Layout.preferredHeight: gridHeader.getPrefHeight(this)
-
-                    onClicked: {
-                        settings.taleWeaver = taleweaverPath.text;
-                        readerCtrl.initDatabase(taleweaverPath.text);
+                Rectangle {
+                    color: "lightGrey"
+                    border {
+                        width: 2
+                        color: "black"
                     }
-                }
+                    radius: 5
 
-                Label {
-                    text: "Slab code"
-                    verticalAlignment: Text.AlignVCenter
-                    wrapMode: Text.WordWrap
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: colReplace.implicitHeight + 40
 
-                    Layout.row: 1
-                    Layout.column: 0
-                    Layout.preferredWidth: gridHeader.getPrefWidth(this)
-                    Layout.preferredHeight: gridHeader.getPrefHeight(this)
-                    Layout.alignment: Qt.AlignLeft
-                }
+                    ColumnLayout {
+                        id: colReplace
+                        
+                        anchors {
+                            left: parent.left
+                            right: parent.right
+                            margins: 20
+                            verticalCenter: parent.verticalCenter
+                        }
+                        height: 80
 
-                TextField {
-                    id: slabCode
 
-                    placeholderText : "paste taleweaver folder path here"
-                    enabled: readerCtrl.dataBaseInitialized
+                        RowLayout {
+                            spacing: 10
+                            
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
 
-                    Layout.row: 1
-                    Layout.column: 1
-                    Layout.columnSpan: 2
-                    Layout.preferredWidth: gridHeader.getPrefWidth(this)
-                    Layout.preferredHeight: gridHeader.getPrefHeight(this)
-                }
+                            Label {
+                                text: "Replace "
+                                verticalAlignment: Text.AlignVCenter
+                                wrapMode: Text.WordWrap
+                            }
 
-                Button {
-                    text: "Convert"
-                    enabled: readerCtrl.dataBaseInitialized
+                            SearchableComboBox {
+                                id: comboBoxReplaceFrom
 
-                    Layout.row: 1
-                    Layout.column: 3
-                    Layout.preferredWidth: gridHeader.getPrefWidth(this)
-                    Layout.preferredHeight: gridHeader.getPrefHeight(this)
+                                imodel: readerCtrl.model
+                                textRole: "assetName"
+                                valueRole: "listIndex"
+                                width: 200
+                            }
 
-                    onClicked: {
-                        readerCtrl.loadSlab(slabCode.text);
+                            Label {
+                                text: "with"
+                                verticalAlignment: Text.AlignVCenter
+                                wrapMode: Text.WordWrap
+                            }
+
+                            SearchableComboBox {
+                                id: comboBoxReplaceTo
+
+                                imodel: readerCtrl.fullModel
+                                textRole: "assetName"
+                                valueRole: "listIndex"
+                                width: 200
+                            }
+
+                            Button {
+                                text: "Replace"
+                                enabled: comboBoxReplaceFrom.currentValue !== -1 && comboBoxReplaceTo.currentValue !== -1 
+
+                                onClicked: {
+                                    readerCtrl.replaceAsset(comboBoxReplaceFrom.currentValue, comboBoxReplaceTo.currentValue);
+                                }
+                            }
+                        }
+
+                        RowLayout {
+                            spacing: 10
+
+                            Label {
+                                text: "New slab code"
+                                verticalAlignment: Text.AlignVCenter
+                                wrapMode: Text.WordWrap
+                            }
+
+                            TextField {
+                                id: newSlabCodeTextField
+
+                                Layout.fillWidth: true
+                            }
+                        }   
                     }
+                   
+                }
+
+                Item {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
                 }
             }
         }
@@ -189,13 +337,18 @@ Rectangle {
                     fill: parent
                     margins: 10
                 }
+                currentIndex: -1
 
                 delegate: LayoutDelegate {
                     width: listSlab.availableWidth
                     assetModel: model.assets
 
                     onLayoutSelected: {
-                        listSlab.currentIndex = id;
+                        if(listSlab.currentIndex === id) {
+                            listSlab.currentIndex = -1;
+                        } else {
+                            listSlab.currentIndex = id;
+                        }
                     }
                 }
             }

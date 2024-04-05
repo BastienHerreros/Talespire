@@ -59,7 +59,7 @@ ItemDelegate {
                 }
 
                 Text {
-                    text: model.assetName
+                    text: model.assetName + " - (" + model.assetType + ")"
                     horizontalAlignment: Qt.AlignLeft
                     verticalAlignment: Qt.AlignVCenter
                     font.pixelSize: 15

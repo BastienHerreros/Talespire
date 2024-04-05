@@ -96,4 +96,36 @@ BOOST_AUTO_TEST_CASE(test_utils_read_bytes_size_errors)
     }
 }
 
+BOOST_AUTO_TEST_CASE(test_utils_write_bytes)
+{
+    char input1[6] = {'a', 'b', 'c', 'd', 'e', 'f'};
+    char input2[4] = {'g', 'h', 'i', 'j'};
+    int16_t number{42};
+
+    std::stringstream stream;
+    libs::reader::writeBits(stream, input1);
+    libs::reader::writeBits(stream, input2);
+    libs::reader::writeBits(stream, number);
+
+    {
+        char read[4];
+        libs::reader::readBits(stream, read);
+        const std::string res(read, 4);
+        BOOST_CHECK_EQUAL(res, "abcd");
+    }
+
+    {
+        char read[6];
+        libs::reader::readBits(stream, read);
+        const std::string res(read, 6);
+        BOOST_CHECK_EQUAL(res, "efghij");
+    }
+
+    {
+        int16_t read;
+        libs::reader::readBits(stream, read);
+        BOOST_CHECK_EQUAL(read, number);
+    }
+}
+
 BOOST_AUTO_TEST_SUITE_END()

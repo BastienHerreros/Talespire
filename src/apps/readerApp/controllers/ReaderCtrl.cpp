@@ -1,6 +1,8 @@
 #include "controllers/ReaderCtrl.hpp"
 
+#include <libs/core/log.hpp>
 #include <libs/reader/reader.hpp>
+#include <libs/reader/writer.hpp>
 
 #include <QSettings>
 #include <QUrl>
@@ -18,6 +20,8 @@ ReaderCtrl::ReaderCtrl()
     qRegisterMetaType<libs::core::AssetInfo>("libs::core::AssetInfo");
     qRegisterMetaType<libs::core::Layout>("libs::core::Layout");
     QObject::connect(this, &ReaderCtrl::newAssetLoaded, this, &ReaderCtrl::onNewAssetLoaded);
+    QObject::connect(
+      this, &ReaderCtrl::initDatabaseEnd, this, &ReaderCtrl::onInitDatabaseEnd, Qt::ConnectionType::QueuedConnection);
 }
 
 ReaderCtrl::~ReaderCtrl()
@@ -34,6 +38,8 @@ ReaderCtrl::~ReaderCtrl()
 }
 
 ReaderCtrl::LayoutModel* ReaderCtrl::getModel() { return &m_model; }
+
+ReaderCtrl::LayoutModel* ReaderCtrl::getFullModel() { return &m_fullModel; }
 
 bool ReaderCtrl::isDatabaseInitialized() const { return m_database.isInitialized(); }
 
@@ -82,14 +88,15 @@ void ReaderCtrl::loadSlab(const QString& slabCode)
     }
 
     m_model.clear();
+    m_lastLoadedSlab.clear();
 
     m_tread = std::thread(
       [this](QString localSlabCode) {
           try
           {
-              const auto layouts = libs::reader::getLayouts(localSlabCode.toStdString());
+              m_lastLoadedSlab = libs::reader::getLayouts(localSlabCode.toStdString());
 
-              for(const auto& layout : layouts)
+              for(const auto& layout : m_lastLoadedSlab)
               {
                   const auto& assetId = layout.m_assetKindId;
                   const auto assetOpt = m_database.getAsset(assetId);
@@ -117,9 +124,52 @@ void ReaderCtrl::loadSlab(const QString& slabCode)
       slabCode);
 }
 
+void ReaderCtrl::replaceAsset(int indexFrom, int indexTo)
+{
+    if(indexFrom < 0 || indexTo < 0)
+    {
+        return;
+    }
+
+    libs::core::print("Replace " + std::to_string(indexFrom) + " to " + std::to_string(indexTo));
+
+    const auto uIndexFrom = static_cast<size_t>(indexFrom);
+    const auto uIndexTo = static_cast<size_t>(indexTo);
+
+    if(uIndexFrom >= m_lastLoadedSlab.size() || uIndexTo >= m_allAssets.size())
+    {
+        return;
+    }
+
+    m_lastLoadedSlab.at(uIndexFrom).replaceUUID(m_allAssets.at(uIndexTo).m_assetKindId);
+
+    const QString newCode = QString::fromStdString(libs::reader::saveLayouts(m_lastLoadedSlab));
+
+    loadSlab(newCode);
+
+    emit newSlabCode(newCode);
+}
+
 void ReaderCtrl::onNewAssetLoaded(const libs::core::AssetInfo& asset, const libs::core::Layout& layout)
 {
     m_model.insertLayout(layout, asset);
+}
+
+void ReaderCtrl::onInitDatabaseEnd()
+{
+    for(const auto& [assetId, asset] : m_database.map())
+    {
+        if(asset.m_type == libs::core::AssetType::Creature)
+        {
+            continue;
+        }
+
+        libs::core::Layout layout(assetId, 1, 0);
+        m_fullModel.insertLayout(layout, asset);
+
+        m_allAssets.emplace_back(layout);
+    }
+    emit fullModelChanged();
 }
 
 }

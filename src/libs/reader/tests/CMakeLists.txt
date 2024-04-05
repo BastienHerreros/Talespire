@@ -13,6 +13,20 @@ helper_add_test(
 
 helper_add_test(
     NAME
+        writer_test
+    PREFIX
+        reader
+    SOURCES
+        writer_test.cpp
+    INCLUDE_DIRS
+    LINKS
+        talespire_core
+        talespire_reader
+    DEFINITIONS)
+
+
+helper_add_test(
+    NAME
         utils_test
     PREFIX
         reader

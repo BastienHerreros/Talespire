@@ -25,6 +25,12 @@ namespace models {
  */
 struct QtLayout
 {
+    /// Index in the list
+    int m_index;
+
+    /// UUID of the asset
+    boost::uuids::uuid m_uuid;
+
     /// The image from Qt
     QImage m_qtImage;
 
@@ -36,6 +42,12 @@ struct QtLayout
 
     /// Model that contains all the assets of a layout
     std::unique_ptr<AssetModel> m_assetModel;
+
+    /// The type of the asset as a string
+    QString m_assetType;
+
+    /// The type of the asset as an enum
+    libs::core::AssetType m_enumType;
 };
 
 /**
@@ -53,10 +65,12 @@ class LayoutModel : public QAbstractListModel
      */
     enum class LayoutModelRoles
     {
-        QtImageRole = Qt::UserRole,
+        IndexRole = Qt::UserRole,
+        QtImageRole,
         NameRole,
         NumberRole,
-        AssetRole
+        AssetRole,
+        AssetTypeRole
     };
 
     /**
