@@ -21,6 +21,7 @@ if(WIN32 AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     set(INTERNAL_MINGW64_BIN_FOLDER_PATH ${MINGW64_BIN_FOLDER_PATH} CACHE INTERNAL "INTERNAL_MINGW64_BIN_FOLDER_PATH")
 endif()
 
+include(cmake/package.cmake)
 include(cmake/helper.cmake)
 
 enable_testing()
