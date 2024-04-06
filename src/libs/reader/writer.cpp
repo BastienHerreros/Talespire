@@ -35,8 +35,8 @@ std::string getUncompressedCode(const std::vector<libs::core::Layout>& layouts)
         memcpy(uuid, libs::core::convertUuidToBin(layout.m_assetKindId).data(), 16);
 
         writeBits(finalCode, uuid);
-        writeBits(finalCode, layout.m_assetsCount, sizeof(u_int16_t));
-        writeBits(finalCode, layout.m_reserved, sizeof(u_int16_t));
+        writeBits(finalCode, layout.m_assetsCount, sizeof(uint16_t));
+        writeBits(finalCode, layout.m_reserved, sizeof(uint16_t));
     }
 
     libs::core::print("Writing assets...");

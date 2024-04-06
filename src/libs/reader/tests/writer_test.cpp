@@ -54,7 +54,7 @@ BOOST_AUTO_TEST_CASE(test_writer_read_write)
 
     {
         char assetKindId[16];
-        u_int16_t assetCount, reserved;
+        uint16_t assetCount, reserved;
         libs::reader::readBits(stream, assetKindId);
         libs::reader::readBits(stream, assetCount);
         libs::reader::readBits(stream, reserved);

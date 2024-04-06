@@ -84,7 +84,7 @@ std::vector<libs::core::Layout> getLayouts(const std::string& slabCode)
     for(auto layoutIt = 0u; layoutIt < layoutCount; ++layoutIt)
     {
         char assetKindId[16];
-        u_int16_t assetCount, reserved;
+        uint16_t assetCount, reserved;
         readBits(decompressedStream, assetKindId);
         readBits(decompressedStream, assetCount);
         readBits(decompressedStream, reserved);
