@@ -88,8 +88,6 @@ function(helper_add_library param_name)
         RUNTIME
         DESTINATION ${CMAKE_INSTALL_BINDIR}
         )
-
-    install_target(${param_name})
 endfunction()
 
 #
