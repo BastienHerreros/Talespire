@@ -110,4 +110,9 @@ function(install_target targetName)
         FRAMEWORK DESTINATION
             ${_libDest}
     )
+
+    if(WIN32)
+        get_target_property(_exeSourceDir ${param_name} SOURCE_DIR)
+        install(CODE "execute_process(COMMAND ${Qt5_DIR}/../../../bin/windeployqt.exe --dir ${CMAKE_INTALL_PREFIX}/${CMAKE_INSTALL_BINDIR} --qmldir ${_exeSourceDir} --libdir ${CMAKE_INTALL_PREFIX}/${CMAKE_INSTALL_BINDIR} --plugindir ${CMAKE_INTALL_PREFIX}/${CMAKE_INSTALL_BINDIR} --no-translations --no-system-d3d-compiler --no-virtualkeyboard --no-webkit2 --no-compiler-runtime ${EXECUTABLE_OUTPUT_PATH}/${targetName}.exe)")
+    endif()
 endfunction()
