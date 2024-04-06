@@ -54,7 +54,7 @@ function(helper_add_library param_name)
         ${_param_PRIVATE_INCLUDES}
         )
 
-    target_compile_options(${param_name} PRIVATE
+    target_compile_options(${param_name} PRIVATE $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:
         -Wall
         -Wextra
         -Wshadow
@@ -74,7 +74,7 @@ function(helper_add_library param_name)
         -Wno-unused-parameter
         -Wduplicated-cond
         -Wduplicated-branches
-        -Wlogical-op)
+        -Wlogical-op>)
 
     target_compile_definitions(${param_name} PUBLIC ${_param_PUBLIC_DEFINITIONS} PRIVATE ${_param_PRIVATE_DEFINITIONS})
 
@@ -129,27 +129,27 @@ function(helper_add_executable param_name)
         PRIVATE ${_param_INCLUDE_DIRS}
         )
 
-        target_compile_options(${param_name} PRIVATE
-        -Wall
-        -Wextra
-        -Wshadow
-        -Wnon-virtual-dtor
-        -Wold-style-cast
-        -Wcast-align
-        -Wunused
-        -Woverloaded-virtual
-        -Wpedantic
-        -Wconversion
-        -Wsign-conversion
-        -Wmisleading-indentation
-        -Wdouble-promotion
-        -Wformat=2
-        -Wno-format-y2k
-        -Werror
-        -Wno-unused-parameter
-        -Wduplicated-cond
-        -Wduplicated-branches
-        -Wlogical-op)
+        target_compile_options(${param_name} PRIVATE $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:
+            -Wall
+            -Wextra
+            -Wshadow
+            -Wnon-virtual-dtor
+            -Wold-style-cast
+            -Wcast-align
+            -Wunused
+            -Woverloaded-virtual
+            -Wpedantic
+            -Wconversion
+            -Wsign-conversion
+            -Wmisleading-indentation
+            -Wdouble-promotion
+            -Wformat=2
+            -Wno-format-y2k
+            -Werror
+            -Wno-unused-parameter
+            -Wduplicated-cond
+            -Wduplicated-branches
+            -Wlogical-op>)
 
         target_compile_definitions(${param_name} PRIVATE ${_param_DEFINITIONS})
 
@@ -200,7 +200,7 @@ function(helper_add_test)
 
     target_include_directories(${_testExecutableName} PRIVATE ${_param_INCLUDE_DIRS})
 
-    target_compile_options(${_testExecutableName} PRIVATE
+    target_compile_options(${_testExecutableName} PRIVATE $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:
         -Wall
         -Wextra
         -Wshadow
@@ -220,7 +220,7 @@ function(helper_add_test)
         -Wno-unused-parameter
         -Wduplicated-cond
         -Wduplicated-branches
-        -Wlogical-op)
+        -Wlogical-op>)
 
     if(BUILD_SHARED_LIBS)
         list(APPEND _param_DEFINITIONS -DBOOST_TEST_DYN_LINK)
