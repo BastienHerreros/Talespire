@@ -5,14 +5,15 @@ import QtQuick.Layouts 1.15
 Dialog {
     id: root
 
-    implicitHeight: 500
+    implicitHeight: 200
     implicitWidth: 500
     closePolicy: Popup.NoAutoClose
     dim: true
+    modal: true
     
     background: Rectangle {
         radius: 10
-        color: "lightGrey"
+        color: "white"
         border {
             color: "darkGrey"
             width: 2
@@ -26,14 +27,17 @@ Dialog {
         verticalAlignment: Text.AlignVCenter
         wrapMode: Text.WordWrap
         text: "Loading..."
+        font.bold: true
     }
 
-    contentItem: BusyIndicator {
-        anchors {
-            fill: parent
-            margins: 10
-            centerIn: parent
+    contentItem: Item {
+        anchors.fill: parent
+
+        BusyIndicator {
+            running: true
+            anchors.centerIn: parent
+            width: 100
+            height: 100
         }
-        running: true
     }
 }

@@ -229,6 +229,7 @@ Rectangle {
                         color: "black"
                     }
                     radius: 5
+                    enabled: readerCtrl.model.rowCount() > 0
 
                     Layout.fillWidth: true
                     Layout.preferredHeight: colReplace.implicitHeight + 40
