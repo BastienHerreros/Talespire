@@ -328,6 +328,9 @@ Rectangle {
 
                             onClicked: {
                                 readerCtrl.replaceAsset(comboBoxReplaceFrom.currentValue, comboBoxReplaceTo.currentValue);
+
+                                comboBoxReplaceFrom.reset();
+                                comboBoxReplaceTo.reset();
                             }
                         }
 
@@ -388,7 +391,7 @@ Rectangle {
             }
             radius: 5
 
-            Layout.fillWidth: true
+            Layout.preferredWidth: parent.width/3
             Layout.fillHeight: true
 
             ListViewWidget {

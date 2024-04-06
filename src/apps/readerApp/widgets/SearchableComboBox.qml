@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 
 import cpp.models 1.0
+import cpp.widgets 1.0
 
 ComboBox {
     id: control
@@ -12,20 +13,48 @@ ComboBox {
     
     model: SortFilterProxyModel {
         sourceModel: imodel
-        filterRole: 258
+        filterRole: LayoutModel.NameRole
         filterRegExp: regEx
         filterCaseSensitivity: Qt.CaseInsensitive
     }
 
     delegate: ItemDelegate {
         width: control.width
-        contentItem: Text {
-            text: assetName
-            color: "black"
-            verticalAlignment: Text.AlignVCenter
-            elide: Text.ElideRight
-        }
         highlighted: control.highlightedIndex === index
+        contentItem: RowLayout {
+            anchors.fill: parent
+                
+            Rectangle {
+                color: "white"
+                border {
+                    width: 2
+                    color: "darkGrey"
+                }
+                radius: 5
+
+                Layout.fillHeight: true
+                Layout.preferredWidth: height
+
+                ImageDisplayWidget {
+                    image: model.qtImage
+
+                    anchors {
+                        fill: parent
+                        margins: 2
+                    }
+                }
+            }
+
+            Text {
+                text: assetName
+                color: "black"
+                verticalAlignment: Text.AlignVCenter
+                elide: Text.ElideRight
+
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+            }
+        }
     }
 
     contentItem: TextArea {
@@ -66,6 +95,8 @@ ComboBox {
         padding: 1
 
         contentItem: ListView {
+            id: comboList
+            
             clip: true
             implicitHeight: contentHeight
             model: control.popup.visible ? control.delegateModel : null
@@ -82,9 +113,14 @@ ComboBox {
 
     function updateRegex() {
         if(filterConditionText.text === "") {
-            control.regEx = new RegExp(".+")
+            control.regEx = new RegExp(".+");
         } else {
-            control.regEx = new RegExp('\\b' + filterConditionText.text + '\\b', 'i')
+            control.regEx = new RegExp('\\b(.+|)' + filterConditionText.text + '(.+|)\\b', 'i');
         }
+    }
+
+    function reset() {
+        control.regEx = new RegExp(".+");
+        filterConditionText.text = "";
     }
 }

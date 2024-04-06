@@ -72,6 +72,7 @@ class LayoutModel : public QAbstractListModel
         AssetRole,
         AssetTypeRole
     };
+    Q_ENUM(LayoutModelRoles)
 
     /**
      * @brief Construct a new LayoutModel object
