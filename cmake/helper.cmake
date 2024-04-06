@@ -1,3 +1,5 @@
+include(cmake/deployment.cmake)
+
 #
 # Create a new library
 #
@@ -86,6 +88,8 @@ function(helper_add_library param_name)
         RUNTIME
         DESTINATION ${CMAKE_INSTALL_BINDIR}
         )
+
+    install_target(${param_name})
 endfunction()
 
 #
@@ -157,6 +161,8 @@ function(helper_add_executable param_name)
             RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
             BUNDLE DESTINATION ${CMAKE_INSTALL_BINDIR}
         )
+
+        install_target(${param_name})
 endfunction()
 
 #
