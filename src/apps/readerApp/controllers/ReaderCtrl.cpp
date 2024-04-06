@@ -4,6 +4,8 @@
 #include <libs/reader/reader.hpp>
 #include <libs/reader/writer.hpp>
 
+#include <QApplication>
+#include <QClipboard>
 #include <QSettings>
 #include <QUrl>
 
@@ -150,9 +152,16 @@ void ReaderCtrl::replaceAsset(int indexFrom, int indexTo)
     emit newSlabCode(newCode);
 }
 
+void ReaderCtrl::copyToClipboard(const QString& text)
+{
+    QClipboard* clipboard = QApplication::clipboard();
+    clipboard->setText(text);
+}
+
 void ReaderCtrl::onNewAssetLoaded(const libs::core::AssetInfo& asset, const libs::core::Layout& layout)
 {
     m_model.insertLayout(layout, asset);
+    emit modelChanged();
 }
 
 void ReaderCtrl::onInitDatabaseEnd()

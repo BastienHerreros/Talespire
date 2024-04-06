@@ -3,11 +3,11 @@ cmake_minimum_required(VERSION 3.27.0)
 project(thirdparty LANGUAGES C CXX)
 
 include(GNUInstallDirs)
+include(CMakeDependentOption)
+include(ExternalProject)
 
 set(default_build_type "Release")
 set(BUILD_SHARED_LIBS ON)
-
-include(ExternalProject)
 
 set(BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}/external")
 
@@ -20,6 +20,8 @@ set(CMAKE_CORE_BUILD_FLAGS
     -DCMAKE_INSTALL_DO_STRIP=${CMAKE_INSTALL_DO_STRIP}
     -DCMAKE_POSITION_INDEPENDENT_CODE=ON)
     
+cmake_dependent_option(BUILD_BOOST "Build boost" ON "UNIX;NOT APPLE;NOT WIN32" OFF)
+
 file(TO_NATIVE_PATH "/" PATH_SEPARATOR)
 if("${PATH_SEPARATOR}" STREQUAL "/")
     set(SCRIPT_EXTENSION sh)
@@ -96,41 +98,43 @@ set(ZLIB_CMAKE_FLAGS -DZLIB_ROOT=${CMAKE_INSTALL_PREFIX} -DZLIB_INCLUDE=${ZLIB_I
 ## Boost
 ########################################
 
-set(BOOST_TARGET boost)
+if(BUILD_BOOST)
+    set(BOOST_TARGET boost)
 
-if(BUILD_SHARED_LIBS)
-    set(BOOST_LINK_FLAGS link=shared)
-else()
-    set(BOOST_LINK_FLAGS link=static)
-endif()
-
-if(WIN32)
-    if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-        set(BOOST_TOOLSET msvc)
-    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-        set(BOOST_TOOLSET gcc)
+    if(BUILD_SHARED_LIBS)
+        set(BOOST_LINK_FLAGS link=shared)
     else()
-        message(FATAL_ERROR "Unhandle compiler ${CMAKE_CXX_COMPILER_ID}")
+        set(BOOST_LINK_FLAGS link=static)
     endif()
-else()
-    set(BOOST_TOOLSET gcc)
-endif()
 
-set(BOOST_FLAGS architecture=x86 toolset=${BOOST_TOOLSET} variant=release cxxstd=20 address-model=64 threading=multi -sZLIB_LIBRARY_PATH="${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}" -sZLIB_INCLUDE=${ZLIB_INCLUDE} -sNO_ZSTD=1)
-ExternalProject_Add(${BOOST_TARGET}
-    GIT_REPOSITORY https://github.com/boostorg/boost.git
-    GIT_TAG boost-1.84.0
-    GIT_SHALLOW ON
-    PREFIX ${BUILD_DIR}
-    BUILD_IN_SOURCE 0
-    BUILD_ALWAYS 0
-    SOURCE_DIR ${CMAKE_CURRENT_BINARY_DIR}/boost
-    BINARY_DIR ${BUILD_DIR}/boost_build
-    INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
-    CONFIGURE_COMMAND cd <SOURCE_DIR>  && ./bootstrap.sh --prefix=<INSTALL_DIR> --with-toolset=${BOOST_TOOLSET} --with-libraries=iostreams,test,serialization
-    BUILD_COMMAND ""
-    INSTALL_COMMAND cd <SOURCE_DIR> && ./b2 --build-dir=<BINARY_DIR> --prefix=<INSTALL_DIR> ${BOOST_FLAGS} ${BOOST_LINK_FLAGS} -d1 -a -j8 -q install
-    DEPENDS ${ZLIB_TARGET})
+    if(WIN32)
+        if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+            set(BOOST_TOOLSET msvc)
+        elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+            set(BOOST_TOOLSET gcc)
+        else()
+            message(FATAL_ERROR "Unhandle compiler ${CMAKE_CXX_COMPILER_ID}")
+        endif()
+    else()
+        set(BOOST_TOOLSET gcc)
+    endif()
+
+    set(BOOST_FLAGS architecture=x86 toolset=${BOOST_TOOLSET} variant=release cxxstd=20 address-model=64 threading=multi -sZLIB_LIBRARY_PATH="${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}" -sZLIB_INCLUDE=${ZLIB_INCLUDE} -sNO_ZSTD=1)
+    ExternalProject_Add(${BOOST_TARGET}
+        GIT_REPOSITORY https://github.com/boostorg/boost.git
+        GIT_TAG boost-1.84.0
+        GIT_SHALLOW ON
+        PREFIX ${BUILD_DIR}
+        BUILD_IN_SOURCE 0
+        BUILD_ALWAYS 0
+        SOURCE_DIR ${CMAKE_CURRENT_BINARY_DIR}/boost
+        BINARY_DIR ${BUILD_DIR}/boost_build
+        INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+        CONFIGURE_COMMAND cd <SOURCE_DIR>  && ./bootstrap.sh --prefix=<INSTALL_DIR> --with-toolset=${BOOST_TOOLSET} --with-libraries=iostreams,test,serialization
+        BUILD_COMMAND ""
+        INSTALL_COMMAND cd <SOURCE_DIR> && ./b2 --build-dir=<BINARY_DIR> --prefix=<INSTALL_DIR> ${BOOST_FLAGS} ${BOOST_LINK_FLAGS} -d1 -a -j8 -q install
+        DEPENDS ${ZLIB_TARGET})
+endif()
 
 ########################################
 ## Eigen

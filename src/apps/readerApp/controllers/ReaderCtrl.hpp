@@ -73,6 +73,12 @@ class ReaderCtrl : public QObject
      */
     Q_INVOKABLE void replaceAsset(int indexFrom, int indexTo);
 
+    /**
+     * @brief Copy a text to the clip board
+     * @param [in] text The text to copy
+     */
+    Q_INVOKABLE void copyToClipboard(const QString& text);
+
   signals:
     /**
      * @brief Signal used to notify that the model has changed

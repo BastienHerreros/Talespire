@@ -47,7 +47,7 @@ Rectangle {
         radius: 5
 
         Layout.fillWidth: true
-        Layout.preferredHeight: labelTitle.implicitHeight
+        Layout.preferredHeight: labelTitle.implicitHeight + 20
 
         Label {
             id: labelTitle
@@ -62,7 +62,6 @@ Rectangle {
             anchors {
                 left: parent.left
                 right: parent.right
-                margins: 2
                 centerIn: parent
             }
         }
@@ -104,8 +103,8 @@ Rectangle {
 
                         columns: 4
                         rows: 2
-                        columnSpacing: 10
-                        rowSpacing: 10
+                        columnSpacing: 5
+                        rowSpacing: 5
                         anchors {
                             left: parent.left
                             right: parent.right
@@ -203,7 +202,7 @@ Rectangle {
                         }
 
                         Button {
-                            text: "Convert"
+                            text: "Load slab code"
                             enabled: readerCtrl.dataBaseInitialized
 
                             Layout.row: 1
@@ -219,7 +218,7 @@ Rectangle {
                 }
 
                 Title {
-                    text: "Replace"
+                    text: "Swap assets"
                 }
 
                 Rectangle {
@@ -229,12 +228,13 @@ Rectangle {
                         color: "black"
                     }
                     radius: 5
+                    enabled: readerCtrl.model.rowCount() > 0
 
                     Layout.fillWidth: true
-                    Layout.preferredHeight: colReplace.implicitHeight + 40
+                    Layout.preferredHeight: gridReplace.implicitHeight + 40
 
-                    ColumnLayout {
-                        id: colReplace
+                    GridLayout {
+                        id: gridReplace
                         
                         anchors {
                             left: parent.left
@@ -243,71 +243,136 @@ Rectangle {
                             verticalCenter: parent.verticalCenter
                         }
                         height: 80
+                        columns: 5
+                        rows: 2
+                        columnSpacing: 5
+                        rowSpacing: 5
 
+                        readonly property real availableWidth: gridReplace.width - gridReplace.columnSpacing * (gridReplace.columns - 1)
+                        readonly property real availableHeight: gridReplace.height - gridReplace.rowSpacing * (gridReplace.columns - 1)
+                        readonly property real cellWidth: gridReplace.availableWidth / gridReplace.columns
+                        readonly property real cellHeight: gridReplace.availableHeight / gridReplace.rows
 
-                        RowLayout {
-                            spacing: 10
+                        function getPrefWidth(item){
+                            return cellWidth * item.Layout.columnSpan + (item.Layout.columnSpan - 1) * gridReplace.columnSpacing
+                        }
+
+                        function getPrefHeight(item){
+                            return cellHeight * item.Layout.rowSpan + (item.Layout.rowSpan - 1) * gridReplace.rowSpacing
+                        }
+
+                        // First row
+                        Label {
+                            text: "Replace"
+                            verticalAlignment: Text.AlignVCenter
+                            wrapMode: Text.WordWrap
+
+                            Layout.row: 0
+                            Layout.column: 0
+                            Layout.preferredWidth: gridReplace.getPrefWidth(this)
+                            Layout.preferredHeight: gridReplace.getPrefHeight(this)
+                            Layout.alignment: Qt.AlignLeft
+                        }
+
+                        SearchableComboBox {
+                            id: comboBoxReplaceFrom
+
+                            imodel: readerCtrl.model
+                            textRole: "assetName"
+                            valueRole: "listIndex"
                             
-                            Layout.fillWidth: true
-                            Layout.fillHeight: true
+                            Layout.row: 0
+                            Layout.column: 1
+                            Layout.preferredWidth: gridReplace.getPrefWidth(this)
+                            Layout.preferredHeight: gridReplace.getPrefHeight(this)
+                            Layout.alignment: Qt.AlignHCenter
+                        }
 
-                            Label {
-                                text: "Replace "
-                                verticalAlignment: Text.AlignVCenter
-                                wrapMode: Text.WordWrap
-                            }
+                        Label {
+                            text: "with"
+                            wrapMode: Text.WordWrap
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
 
-                            SearchableComboBox {
-                                id: comboBoxReplaceFrom
+                            Layout.row: 0
+                            Layout.column: 2
+                            Layout.preferredWidth: gridReplace.getPrefWidth(this)
+                            Layout.preferredHeight: gridReplace.getPrefHeight(this)
+                            Layout.alignment: Qt.AlignHCenter
+                        }
 
-                                imodel: readerCtrl.model
-                                textRole: "assetName"
-                                valueRole: "listIndex"
-                                width: 200
-                            }
+                        SearchableComboBox {
+                            id: comboBoxReplaceTo
 
-                            Label {
-                                text: "with"
-                                verticalAlignment: Text.AlignVCenter
-                                wrapMode: Text.WordWrap
-                            }
+                            imodel: readerCtrl.fullModel
+                            textRole: "assetName"
+                            valueRole: "listIndex"
+                            width: 200
 
-                            SearchableComboBox {
-                                id: comboBoxReplaceTo
+                            Layout.row: 0
+                            Layout.column: 3
+                            Layout.preferredWidth: gridReplace.getPrefWidth(this)
+                            Layout.preferredHeight: gridReplace.getPrefHeight(this)
+                            Layout.alignment: Qt.AlignHCenter
+                        }
 
-                                imodel: readerCtrl.fullModel
-                                textRole: "assetName"
-                                valueRole: "listIndex"
-                                width: 200
-                            }
+                        Button {
+                            text: "Replace"
+                            enabled: comboBoxReplaceFrom.currentIndex !== -1 && comboBoxReplaceTo.currentIndex !== -1 
 
-                            Button {
-                                text: "Replace"
-                                enabled: comboBoxReplaceFrom.currentValue !== -1 && comboBoxReplaceTo.currentValue !== -1 
+                            Layout.row: 0
+                            Layout.column: 4
+                            Layout.preferredWidth: gridReplace.getPrefWidth(this)
+                            Layout.preferredHeight: gridReplace.getPrefHeight(this)
+                            Layout.alignment: Qt.AlignRight
 
-                                onClicked: {
-                                    readerCtrl.replaceAsset(comboBoxReplaceFrom.currentValue, comboBoxReplaceTo.currentValue);
-                                }
+                            onClicked: {
+                                readerCtrl.replaceAsset(comboBoxReplaceFrom.currentValue, comboBoxReplaceTo.currentValue);
+
+                                comboBoxReplaceFrom.reset();
+                                comboBoxReplaceTo.reset();
                             }
                         }
 
-                        RowLayout {
-                            spacing: 10
+                        //Second row
+                        Label {
+                            text: "New slab code"
+                            verticalAlignment: Text.AlignVCenter
+                            wrapMode: Text.WordWrap
 
-                            Label {
-                                text: "New slab code"
-                                verticalAlignment: Text.AlignVCenter
-                                wrapMode: Text.WordWrap
+                            Layout.row: 1
+                            Layout.column: 0
+                            Layout.preferredWidth: gridReplace.getPrefWidth(this)
+                            Layout.preferredHeight: gridReplace.getPrefHeight(this)
+                            Layout.alignment: Qt.AlignLeft
+                        }
+
+                        TextField {
+                            id: newSlabCodeTextField
+
+                            Layout.row: 1
+                            Layout.column: 1
+                            Layout.columnSpan: 3
+                            Layout.preferredWidth: gridReplace.getPrefWidth(this)
+                            Layout.preferredHeight: gridReplace.getPrefHeight(this)
+                            Layout.alignment: Qt.AlignHCenter
+                        }
+
+                        Button {
+                            text: "Copy code"
+                            enabled: newSlabCodeTextField.text !== ""
+
+                            Layout.row: 1
+                            Layout.column: 4
+                            Layout.preferredWidth: gridReplace.getPrefWidth(this)
+                            Layout.preferredHeight: gridReplace.getPrefHeight(this)
+                            Layout.alignment: Qt.AlignRight
+
+                            onClicked: {
+                                readerCtrl.copyToClipboard(newSlabCodeTextField.text);
                             }
-
-                            TextField {
-                                id: newSlabCodeTextField
-
-                                Layout.fillWidth: true
-                            }
-                        }   
+                        }
                     }
-                   
                 }
 
                 Item {
@@ -326,7 +391,7 @@ Rectangle {
             }
             radius: 5
 
-            Layout.fillWidth: true
+            Layout.preferredWidth: parent.width/3
             Layout.fillHeight: true
 
             ListViewWidget {

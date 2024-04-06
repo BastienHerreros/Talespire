@@ -8,12 +8,13 @@ Dialog {
     property alias type: header.text
     property alias message: body.text
 
-    implicitHeight: 500
+    implicitHeight: 200
     implicitWidth: 500
+    modal: true
 
     background: Rectangle {
         radius: 10
-        color: "lightGrey"
+        color: "white"
         border {
             color: "darkGrey"
             width: 2
@@ -28,6 +29,7 @@ Dialog {
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         wrapMode: Text.WordWrap
+        font.bold: true
     }
 
     contentItem: Label {

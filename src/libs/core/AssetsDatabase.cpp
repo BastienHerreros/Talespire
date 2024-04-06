@@ -88,8 +88,8 @@ void AssetsDatabase::init(const std::string& taleweaverFolderPath)
                         auto it = spriteSheetRoot.begin();
                         std::advance(it, spriteSheetId);
 
-                        const auto spritesheetFilename =
-                          dirIt.path().parent_path() / it->second.get_child("Path").get_value<std::string>();
+                        const std::string spritesheetFilename =
+                          (dirIt.path().parent_path() / it->second.get_child("Path").get_value<std::string>()).string();
 
                         if(cache.count(spritesheetFilename) == 0)
                         {

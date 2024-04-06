@@ -35,19 +35,19 @@ std::string getUncompressedCode(const std::vector<libs::core::Layout>& layouts)
         memcpy(uuid, libs::core::convertUuidToBin(layout.m_assetKindId).data(), 16);
 
         writeBits(finalCode, uuid);
-        writeBits(finalCode, layout.m_assetsCount, sizeof(u_int16_t));
-        writeBits(finalCode, layout.m_reserved, sizeof(u_int16_t));
+        writeBits(finalCode, layout.m_assetsCount, sizeof(uint16_t));
+        writeBits(finalCode, layout.m_reserved, sizeof(uint16_t));
     }
 
     libs::core::print("Writing assets...");
 
     // Size in bit
-    constexpr int componentSize{18};
-    constexpr int scaleXSize{componentSize};
-    constexpr int scaleYSize{componentSize};
-    constexpr int scaleZSize{componentSize};
-    constexpr int rotSize{5};
-    constexpr int unusedSize{5};
+    constexpr int64_t componentSize{18};
+    constexpr int64_t scaleXSize{componentSize};
+    constexpr int64_t scaleYSize{componentSize};
+    constexpr int64_t scaleZSize{componentSize};
+    [[maybe_unused]] constexpr int64_t rotSize{5};
+    [[maybe_unused]] constexpr int64_t unusedSize{5};
 
     assert(scaleXSize + scaleYSize + scaleZSize + rotSize + unusedSize == 64);
 
@@ -55,13 +55,13 @@ std::string getUncompressedCode(const std::vector<libs::core::Layout>& layouts)
     {
         for(const auto& asset : layout.m_assets)
         {
-            const auto scale = asset.getRawScale().cast<long int>();
-            const auto rot = static_cast<long int>(asset.getRawRot());
+            const auto scale = asset.getRawScale();
+            const auto rot = static_cast<int64_t>(asset.getRawRot());
 
             int64_t rawAsset = (rot << scaleZSize);
-            rawAsset = (rawAsset | scale.z()) << scaleYSize;
-            rawAsset = (rawAsset | scale.y()) << scaleXSize;
-            rawAsset = (rawAsset | scale.x());
+            rawAsset = (rawAsset | static_cast<int64_t>(scale.z())) << scaleYSize;
+            rawAsset = (rawAsset | static_cast<int64_t>(scale.y())) << scaleXSize;
+            rawAsset = (rawAsset | static_cast<int64_t>(scale.x()));
 
             writeBits(finalCode, rawAsset);
         }
