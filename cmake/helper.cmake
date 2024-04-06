@@ -88,6 +88,8 @@ function(helper_add_library param_name)
         RUNTIME
         DESTINATION ${CMAKE_INSTALL_BINDIR}
         )
+
+    install_target(${param_name})
 endfunction()
 
 #
@@ -121,7 +123,13 @@ function(helper_add_executable param_name)
         message(FATAL_ERROR "You must provide the software SOURCES in 'helper_add_executable'")
     endif()
 
-    add_executable(${param_name} ${_param_SOURCES} ${_appIcon})
+    if(APPLE)
+        set(_platformFlags MACOSX_BUNDLE)
+    elseif(WIN32)
+        set(_platformFlags WIN32)
+    endif()
+
+    add_executable(${param_name} ${_platformFlags} ${_param_SOURCES} ${_appIcon})
 
     target_link_libraries(${param_name}
         PRIVATE ${_param_LINKS}
@@ -161,6 +169,10 @@ function(helper_add_executable param_name)
         )
 
         install_target(${param_name})
+        if(WIN32)
+            get_target_property(_exeSourceDir ${param_name} SOURCE_DIR)
+            install(CODE "execute_process(COMMAND ${Qt5_DIR}/../../../bin/windeployqt.exe --dir ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR} --qmldir ${_exeSourceDir} --libdir ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR} --plugindir ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR} --no-translations --no-system-d3d-compiler --no-virtualkeyboard --no-webkit2 --no-compiler-runtime ${EXECUTABLE_OUTPUT_PATH}/${param_name}.exe)")
+        endif()
 endfunction()
 
 #

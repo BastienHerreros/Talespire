@@ -11,7 +11,6 @@ set(BUILD_SHARED_LIBS ON)
 set(generated_dir "${CMAKE_CURRENT_BINARY_DIR}/generated")
 
 include(GNUInstallDirs)
-include(cmake/helper.cmake)
 
 set(OUTPUT_FOLDER_NAME "${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}")
 set(EXECUTABLE_OUTPUT_PATH "${PROJECT_BINARY_DIR}/${OUTPUT_FOLDER_NAME}")
@@ -21,6 +20,8 @@ if(WIN32 AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     set(MINGW64_BIN_FOLDER_PATH CACHE PATH "The path to the mingw bin folder (Usually C:/..path_to_msys../mingw64/bin)")
     set(INTERNAL_MINGW64_BIN_FOLDER_PATH ${MINGW64_BIN_FOLDER_PATH} CACHE INTERNAL "INTERNAL_MINGW64_BIN_FOLDER_PATH")
 endif()
+
+include(cmake/helper.cmake)
 
 enable_testing()
 
