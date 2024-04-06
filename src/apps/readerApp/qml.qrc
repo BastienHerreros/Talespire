@@ -1,0 +1,19 @@
+<RCC>
+    <qresource prefix="/">
+        <file>app/mainApplication.qml</file>
+
+        <file>pages/qmldir</file>
+        <file>pages/ReaderPage.qml</file>
+
+        <file>widgets/qmldir</file>
+        <file>widgets/ListViewWidget.qml</file>
+        <file>widgets/LayoutDelegate.qml</file>
+        <file>widgets/AssetDelegate.qml</file>
+        <file>widgets/PopupWidget.qml</file>
+        <file>widgets/LoadingPopupWidget.qml</file>
+        <file>widgets/SearchableComboBox.qml</file>
+    </qresource>
+
+    <qresource prefix="/icons">
+    </qresource>
+</RCC>
