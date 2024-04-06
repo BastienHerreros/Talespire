@@ -97,18 +97,18 @@ std::vector<libs::core::Layout> getLayouts(const std::string& slabCode)
     libs::core::print("Reading assets...");
 
     // Size in bit
-    constexpr int componentSize{18};
-    constexpr int scaleXSize{componentSize};
-    constexpr int scaleYSize{componentSize};
-    constexpr int scaleZSize{componentSize};
-    constexpr int rotSize{5};
-    constexpr int unusedSize{5};
+    constexpr int64_t componentSize{18};
+    constexpr int64_t scaleXSize{componentSize};
+    constexpr int64_t scaleYSize{componentSize};
+    constexpr int64_t scaleZSize{componentSize};
+    constexpr int64_t rotSize{5};
+    constexpr int64_t unusedSize{5};
 
-    constexpr int scaleXOffset{0};
-    constexpr int scaleYOffset{scaleXOffset + scaleXSize};
-    constexpr int scaleZOffset{scaleYOffset + scaleYSize};
-    constexpr int rotOffset{scaleZOffset + scaleZSize};
-    constexpr int unusedOffset{rotOffset + rotSize};
+    constexpr int64_t scaleXOffset{0};
+    constexpr int64_t scaleYOffset{scaleXOffset + scaleXSize};
+    constexpr int64_t scaleZOffset{scaleYOffset + scaleYSize};
+    constexpr int64_t rotOffset{scaleZOffset + scaleZSize};
+    constexpr int64_t unusedOffset{rotOffset + rotSize};
 
     assert(scaleXSize + scaleYSize + scaleZSize + rotSize + unusedSize == 64);
 
@@ -119,9 +119,9 @@ std::vector<libs::core::Layout> getLayouts(const std::string& slabCode)
             int64_t rawAsset;
             readBits(decompressedStream, rawAsset);
 
-            [[maybe_unused]] long int unused;
-            long int rot;
-            Eigen::Vector3<long int> scale;
+            [[maybe_unused]] int64_t unused;
+            int64_t rot;
+            Eigen::Vector3<int64_t> scale;
 
             scale.x() = (rawAsset >> scaleXOffset) & getMask(scaleXSize);
             scale.y() = (rawAsset >> scaleYOffset) & getMask(scaleYSize);
