@@ -17,6 +17,14 @@ struct Asset
      */
     Asset(double rot, const Eigen::Vector3d& scale);
 
+    Asset(Asset&& other);
+
+    Asset(const Asset& other);
+
+    Asset& operator=(Asset&& other);
+
+    Asset& operator=(const Asset& other);
+
     /**
      * @brief Get the raw scale (pos / 100)
      * @return The raw scale (pos / 100)

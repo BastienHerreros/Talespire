@@ -244,7 +244,7 @@ Rectangle {
                         }
                         height: 80
                         columns: 5
-                        rows: 2
+                        rows: 1
                         columnSpacing: 5
                         rowSpacing: 5
 
@@ -333,28 +333,154 @@ Rectangle {
                                 comboBoxReplaceTo.reset();
                             }
                         }
+                    }
+                }
 
-                        //Second row
+                Rectangle {
+                    color: "lightGrey"
+                    border {
+                        width: 2
+                        color: "black"
+                    }
+                    radius: 5
+                    enabled: readerCtrl.model.rowCount() > 0
+
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: gridRemove.implicitHeight + 40
+
+                    GridLayout {
+                        id: gridRemove
+                        
+                        anchors {
+                            left: parent.left
+                            right: parent.right
+                            margins: 20
+                            verticalCenter: parent.verticalCenter
+                        }
+                        height: 80
+                        columns: 3
+                        rows: 1
+                        columnSpacing: 5
+                        rowSpacing: 5
+
+                        readonly property real availableWidth: gridRemove.width - gridRemove.columnSpacing * (gridRemove.columns - 1)
+                        readonly property real availableHeight: gridRemove.height - gridRemove.rowSpacing * (gridRemove.columns - 1)
+                        readonly property real cellWidth: gridRemove.availableWidth / gridRemove.columns
+                        readonly property real cellHeight: gridRemove.availableHeight / gridRemove.rows
+
+                        function getPrefWidth(item){
+                            return cellWidth * item.Layout.columnSpan + (item.Layout.columnSpan - 1) * gridRemove.columnSpacing
+                        }
+
+                        function getPrefHeight(item){
+                            return cellHeight * item.Layout.rowSpan + (item.Layout.rowSpan - 1) * gridRemove.rowSpacing
+                        }
+
+                        // First row
+                        Label {
+                            text: "Remove"
+                            verticalAlignment: Text.AlignVCenter
+                            wrapMode: Text.WordWrap
+
+                            Layout.row: 0
+                            Layout.column: 0
+                            Layout.preferredWidth: gridRemove.getPrefWidth(this)
+                            Layout.preferredHeight: gridRemove.getPrefHeight(this)
+                            Layout.alignment: Qt.AlignLeft
+                        }
+
+                        SearchableComboBox {
+                            id: comboBoxRemove
+
+                            imodel: readerCtrl.model
+                            textRole: "assetName"
+                            valueRole: "listIndex"
+                            
+                            Layout.row: 0
+                            Layout.column: 1
+                            Layout.preferredWidth: gridRemove.getPrefWidth(this)
+                            Layout.preferredHeight: gridRemove.getPrefHeight(this)
+                            Layout.alignment: Qt.AlignHCenter
+                        }
+
+                        Button {
+                            text: "Remove"
+                            enabled: comboBoxRemove.currentIndex !== -1
+
+                            Layout.row: 0
+                            Layout.column: 2
+                            Layout.preferredWidth: gridRemove.getPrefWidth(this)
+                            Layout.preferredHeight: gridRemove.getPrefHeight(this)
+                            Layout.alignment: Qt.AlignRight
+
+                            onClicked: {
+                                readerCtrl.removeAsset(comboBoxRemove.currentValue);
+
+                                comboBoxRemove.reset();
+                            }
+                        }
+                    }
+                }
+
+                Rectangle {
+                    color: "lightGrey"
+                    border {
+                        width: 2
+                        color: "black"
+                    }
+                    radius: 5
+                    enabled: readerCtrl.model.rowCount() > 0
+
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: gridReplace.implicitHeight + 40
+
+                    GridLayout {
+                        id: gridNewCode
+                        
+                        anchors {
+                            left: parent.left
+                            right: parent.right
+                            margins: 20
+                            verticalCenter: parent.verticalCenter
+                        }
+                        height: 80
+                        columns: 3
+                        rows: 1
+                        columnSpacing: 5
+                        rowSpacing: 5
+
+                        readonly property real availableWidth: gridNewCode.width - gridNewCode.columnSpacing * (gridNewCode.columns - 1)
+                        readonly property real availableHeight: gridNewCode.height - gridNewCode.rowSpacing * (gridNewCode.columns - 1)
+                        readonly property real cellWidth: gridNewCode.availableWidth / gridNewCode.columns
+                        readonly property real cellHeight: gridNewCode.availableHeight / gridNewCode.rows
+
+                        function getPrefWidth(item){
+                            return cellWidth * item.Layout.columnSpan + (item.Layout.columnSpan - 1) * gridNewCode.columnSpacing
+                        }
+
+                        function getPrefHeight(item){
+                            return cellHeight * item.Layout.rowSpan + (item.Layout.rowSpan - 1) * gridNewCode.rowSpacing
+                        }
+
                         Label {
                             text: "New slab code"
                             verticalAlignment: Text.AlignVCenter
                             wrapMode: Text.WordWrap
 
-                            Layout.row: 1
+                            Layout.row: 0
                             Layout.column: 0
-                            Layout.preferredWidth: gridReplace.getPrefWidth(this)
-                            Layout.preferredHeight: gridReplace.getPrefHeight(this)
+                            Layout.preferredWidth: gridNewCode.getPrefWidth(this)
+                            Layout.preferredHeight: gridNewCode.getPrefHeight(this)
                             Layout.alignment: Qt.AlignLeft
                         }
 
                         TextField {
                             id: newSlabCodeTextField
 
-                            Layout.row: 1
+                            Layout.row: 0
                             Layout.column: 1
-                            Layout.columnSpan: 3
-                            Layout.preferredWidth: gridReplace.getPrefWidth(this)
-                            Layout.preferredHeight: gridReplace.getPrefHeight(this)
+                            Layout.preferredWidth: gridNewCode.getPrefWidth(this)
+                            Layout.preferredHeight: gridNewCode.getPrefHeight(this)
                             Layout.alignment: Qt.AlignHCenter
                         }
 
@@ -362,10 +488,10 @@ Rectangle {
                             text: "Copy code"
                             enabled: newSlabCodeTextField.text !== ""
 
-                            Layout.row: 1
-                            Layout.column: 4
-                            Layout.preferredWidth: gridReplace.getPrefWidth(this)
-                            Layout.preferredHeight: gridReplace.getPrefHeight(this)
+                            Layout.row: 0
+                            Layout.column: 2
+                            Layout.preferredWidth: gridNewCode.getPrefWidth(this)
+                            Layout.preferredHeight: gridNewCode.getPrefHeight(this)
                             Layout.alignment: Qt.AlignRight
 
                             onClicked: {

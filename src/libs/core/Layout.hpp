@@ -30,6 +30,14 @@ struct Layout
      */
     Layout();
 
+    Layout(Layout&& other);
+
+    Layout(const Layout& other);
+
+    Layout& operator=(Layout&& other);
+
+    Layout& operator=(const Layout& other);
+
     /**
      * @brief Replace the uuid
      * @param [in] newId The new id

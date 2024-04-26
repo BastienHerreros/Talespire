@@ -74,6 +74,12 @@ class ReaderCtrl : public QObject
     Q_INVOKABLE void replaceAsset(int indexFrom, int indexTo);
 
     /**
+     * @brief Remove an asset
+     * @param [in] index The id (in the model) of the asset to remove
+     */
+    Q_INVOKABLE void removeAsset(int index);
+
+    /**
      * @brief Copy a text to the clip board
      * @param [in] text The text to copy
      */

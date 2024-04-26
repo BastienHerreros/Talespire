@@ -152,6 +152,31 @@ void ReaderCtrl::replaceAsset(int indexFrom, int indexTo)
     emit newSlabCode(newCode);
 }
 
+void ReaderCtrl::removeAsset(int index)
+{
+    if(index < 0)
+    {
+        return;
+    }
+
+    libs::core::print("Remove " + std::to_string(index));
+
+    const auto uIndex = static_cast<size_t>(index);
+
+    if(uIndex >= m_lastLoadedSlab.size())
+    {
+        return;
+    }
+
+    m_lastLoadedSlab.erase(m_lastLoadedSlab.begin() + index);
+
+    const QString newCode = QString::fromStdString(libs::reader::saveLayouts(m_lastLoadedSlab));
+
+    loadSlab(newCode);
+
+    emit newSlabCode(newCode);
+}
+
 void ReaderCtrl::copyToClipboard(const QString& text)
 {
     QClipboard* clipboard = QApplication::clipboard();
